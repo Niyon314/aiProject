@@ -5,6 +5,7 @@ import theme from '../../styles/theme'
 
 // 🌸 可爱功能卡片数据
 const featureCards = [
+  { icon: '🍽️', label: '今天吃什么', path: '/pages/couple/eating/eating', color: theme.secondary.peach },
   { icon: '🧹', label: '今日家务', path: '/pages/couple/tasks/tasks', color: theme.secondary.mint },
   { icon: '💰', label: '共同账单', path: '/pages/couple/bills/bills', color: theme.secondary.lemon },
   { icon: '📅', label: '日程安排', path: '/pages/couple/calendar/calendar', color: theme.secondary.sky },

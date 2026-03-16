@@ -10,6 +10,7 @@ import { MomentsModule } from './moments/moments.module'
 import { CalendarModule } from './calendar/calendar.module'
 import { AnniversariesModule } from './anniversaries/anniversaries.module'
 import { NotificationsModule } from './notifications/notifications.module'
+import { EatingModule } from './eating/modules/eating.module'
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { NotificationsModule } from './notifications/notifications.module'
     CalendarModule,
     AnniversariesModule,
     NotificationsModule,
+    EatingModule,
   ],
 })
 export class AppModule {}

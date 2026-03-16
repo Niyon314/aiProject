@@ -13,6 +13,9 @@ export default {
     'pages/couple/calendar/edit',
     'pages/couple/anniversaries/anniversaries',
     'pages/couple/anniversaries/edit',
+    'pages/couple/eating/eating',
+    'pages/couple/eating/add-meal',
+    'pages/couple/eating/add-recipe',
   ],
   window: {
     backgroundTextStyle: 'light',
