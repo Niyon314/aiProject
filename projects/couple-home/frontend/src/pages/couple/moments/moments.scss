@@ -1,24 +1,318 @@
+// 少女可爱风 - 照片墙页面样式 📸💕
+
 .moments-page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: linear-gradient(180deg, #FFF5F7 0%, #FFF9FB 100%);
   padding: 30px;
-  
+  padding-bottom: 100px;
+
+  // 头部
   .header {
     margin-bottom: 30px;
-    
+    text-align: center;
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
     .title {
-      font-size: 40px;
+      font-size: 44px;
       font-weight: bold;
-      color: #333;
+      background: linear-gradient(135deg, #FFB6C1 0%, #FF8FAB 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 24px;
+      color: #FF8FAB;
+      margin-top: 10px;
+    }
+
+    .view-mode-toggle {
+      display: flex;
+      gap: 10px;
+
+      .mode-btn {
+        padding: 10px 20px;
+        font-size: 24px;
+        border-radius: 30px;
+        background: #FFF;
+        color: #FF8FAB;
+        border: 2px solid #FFB6C1;
+
+        &.active {
+          background: linear-gradient(135deg, #FFB6C1 0%, #FF8FAB 100%);
+          color: #FFF;
+          border: none;
+        }
+      }
     }
   }
-  
-  .moments-list {
-    .empty-tip {
-      text-align: center;
-      color: #999;
-      font-size: 28px;
-      padding: 60px 0;
+
+  // 标签滚动栏
+  .tags-scroll {
+    margin-bottom: 20px;
+  }
+
+  .tags-container {
+    display: flex;
+    gap: 15px;
+    padding: 10px 0;
+
+    .tag-item {
+      flex-shrink: 0;
+      padding: 10px 24px;
+      background: #FFF;
+      border-radius: 30px;
+      font-size: 24px;
+      color: #FF8FAB;
+      border: 2px solid #FFB6C1;
+      transition: all 0.3s ease;
+
+      &.active {
+        background: linear-gradient(135deg, #FFB6C1 0%, #FF8FAB 100%);
+        color: #FFF;
+        border: none;
+        box-shadow: 0 4px 12px rgba(255, 143, 171, 0.3);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  // 上传按钮
+  .upload-btn-wrapper {
+    margin-bottom: 30px;
+    text-align: center;
+
+    .upload-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px 50px;
+      background: linear-gradient(135deg, #FFB6C1 0%, #FF8FAB 100%);
+      color: #FFF;
+      font-size: 30px;
+      font-weight: bold;
+      border-radius: 50px;
+      border: none;
+      box-shadow: 0 6px 20px rgba(255, 143, 171, 0.4);
+
+      .upload-icon {
+        font-size: 36px;
+      }
+
+      &:active {
+        transform: scale(0.95);
+        box-shadow: 0 4px 12px rgba(255, 143, 171, 0.3);
+      }
+    }
+  }
+
+  // 内容滚动区
+  .content-scroll {
+    height: calc(100vh - 350px);
+  }
+
+  // 加载状态
+  .loading {
+    text-align: center;
+    padding: 60px 0;
+    font-size: 28px;
+    color: #FF8FAB;
+  }
+
+  // 空状态
+  .empty-state {
+    text-align: center;
+    padding: 100px 0;
+
+    .empty-emoji {
+      font-size: 100px;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .empty-text {
+      font-size: 32px;
+      color: #FF8FAB;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .empty-hint {
+      font-size: 24px;
+      color: #FFB6C1;
+    }
+  }
+
+  // 网格视图
+  .moments-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  // 时间线视图
+  .timeline {
+    .timeline-group {
+      margin-bottom: 40px;
+
+      .timeline-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .timeline-date {
+          font-size: 28px;
+          font-weight: bold;
+          color: #FF8FAB;
+          background: #FFF;
+          padding: 10px 20px;
+          border-radius: 20px;
+          border: 2px solid #FFB6C1;
+        }
+
+        .timeline-line {
+          flex: 1;
+          height: 3px;
+          background: linear-gradient(90deg, #FFB6C1 0%, transparent 100%);
+          margin-left: 15px;
+        }
+      }
+
+      .timeline-moments {
+        padding-left: 20px;
+      }
+    }
+  }
+
+  // 瞬间卡片
+  .moment-card {
+    background: #FFF;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(255, 143, 171, 0.15);
+    border: 2px solid #FFF5F7;
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(255, 143, 171, 0.25);
+    }
+
+    .moment-images {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      background: #F8F9FA;
+
+      .moment-image {
+        width: 100%;
+        height: 100%;
+      }
+
+      .image-count {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(255, 143, 171, 0.9);
+        color: #FFF;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+
+    .moment-info {
+      padding: 20px;
+
+      .moment-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .moment-desc {
+        font-size: 24px;
+        color: #6C757D;
+        display: block;
+        margin-bottom: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .moment-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+
+        .moment-tag {
+          font-size: 20px;
+          color: #FF8FAB;
+          background: #FFF5F7;
+          padding: 4px 12px;
+          border-radius: 12px;
+        }
+      }
+
+      .moment-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .moment-meta {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          .moment-date {
+            font-size: 22px;
+            color: #ADB5BD;
+          }
+
+          .moment-location {
+            font-size: 22px;
+            color: #FF8FAB;
+          }
+        }
+
+        .moment-actions {
+          display: flex;
+          gap: 10px;
+
+          .like-btn {
+            padding: 8px 16px;
+            font-size: 22px;
+            background: linear-gradient(135deg, #FFF5F7 0%, #FFE4E9 100%);
+            color: #FF8FAB;
+            border: none;
+            border-radius: 20px;
+          }
+
+          .delete-btn {
+            padding: 8px 16px;
+            font-size: 22px;
+            background: #FFF;
+            color: #FF6B81;
+            border: 2px solid #FFB6C1;
+            border-radius: 20px;
+          }
+        }
+      }
     }
   }
 }

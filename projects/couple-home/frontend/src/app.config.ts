@@ -7,8 +7,12 @@ export default {
     'pages/theme-showcase/theme-showcase',
     'pages/couple/tasks/tasks',
     'pages/couple/bills/bills',
+    'pages/couple/bills/settlement/settlement',
     'pages/couple/moments/moments',
-    'pages/couple/calendar/calendar'
+    'pages/couple/calendar/calendar',
+    'pages/couple/calendar/edit',
+    'pages/couple/anniversaries/anniversaries',
+    'pages/couple/anniversaries/edit',
   ],
   window: {
     backgroundTextStyle: 'light',

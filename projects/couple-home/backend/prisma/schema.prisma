@@ -196,6 +196,10 @@ model Anniversary {
   description String?
   isRecurring Boolean  @default(true) // 是否每年重复
   
+  // 提醒设置
+  enableReminder Boolean @default(true) // 是否启用提醒
+  reminderDays Int[]    @default([7, 3, 1, 0]) // 提前几天提醒 [7, 3, 1, 0]
+  
   // 所属用户
   userId      String
   user        User     @relation(fields: [userId], references: [id])
@@ -223,6 +227,9 @@ model Moment {
   location    String?
   latitude    Float?
   longitude   Float?
+
+  // 标签 (事件/地点分类)
+  tags        String[]
 
   // 所属用户
   userId      String

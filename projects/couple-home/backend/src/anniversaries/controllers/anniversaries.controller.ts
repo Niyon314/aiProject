@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, Query, ApiTags, ApiOperation } from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Patch, Delete, Query } from '@nestjs/common'
+import { ApiTags, ApiOperation } from '@nestjs/swagger'
 import { AnniversariesService } from './services/anniversaries.service'
-import { CreateAnniversaryDto } from './dto/create-anniversary.dto'
+import { CreateAnniversaryDto, UpdateAnniversaryDto } from './dto/create-anniversary.dto'
 
-@ApiTags('纪念日')
+@ApiTags('纪念日 💕')
 @Controller('anniversaries')
 export class AnniversariesController {
   constructor(private readonly anniversariesService: AnniversariesService) {}
@@ -15,7 +16,7 @@ export class AnniversariesController {
 
   @Get()
   @ApiOperation({ summary: '获取纪念日列表' })
-  findByUser(
+  findAll(
     @Query('userId') userId?: string,
     @Query('coupleId') coupleId?: string,
   ) {
@@ -25,11 +26,18 @@ export class AnniversariesController {
     if (userId) {
       return this.anniversariesService.findByUser(userId)
     }
+    return []
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: '获取单个纪念日详情' })
+  findOne(@Param('id') id: string) {
+    return this.anniversariesService.findById(id)
   }
 
   @Patch(':id')
   @ApiOperation({ summary: '更新纪念日' })
-  update(@Param('id') id: string, @Body() updateAnniversaryDto: any) {
+  update(@Param('id') id: string, @Body() updateAnniversaryDto: UpdateAnniversaryDto) {
     return this.anniversariesService.update(id, updateAnniversaryDto)
   }
 
@@ -37,5 +45,11 @@ export class AnniversariesController {
   @ApiOperation({ summary: '删除纪念日' })
   remove(@Param('id') id: string) {
     return this.anniversariesService.remove(id)
+  }
+
+  @Post('check-reminders')
+  @ApiOperation({ summary: '检查并发送提醒 (定时任务调用)' })
+  checkReminders() {
+    return this.anniversariesService.checkAndSendReminders()
   }
 }
