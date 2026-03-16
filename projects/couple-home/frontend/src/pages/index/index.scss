@@ -1,0 +1,52 @@
+.index {
+  padding: 30px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FFE5EC 0%, #FFB5C5 100%);
+}
+
+.welcome {
+  text-align: center;
+  padding: 40px 0;
+  
+  .title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #FF6B81;
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .subtitle {
+    font-size: 28px;
+    color: #FF8FA3;
+    display: block;
+  }
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.action-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(255, 107, 129, 0.2);
+  
+  .icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .label {
+    font-size: 26px;
+    color: #333;
+    font-weight: 500;
+    display: block;
+  }
+}
