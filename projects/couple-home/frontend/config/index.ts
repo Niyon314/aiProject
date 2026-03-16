@@ -15,7 +15,9 @@ export default defineConfig(async () => {
     sourceRoot: 'src',
     outputRoot: 'dist',
     plugins: [],
-    defineConstants: {},
+    defineConstants: {
+      'process.env.API_BASE_URL': JSON.stringify(process.env.API_BASE_URL || 'http://localhost:3000'),
+    },
     framework: 'react',
     compiler: 'webpack5',
     cache: {
