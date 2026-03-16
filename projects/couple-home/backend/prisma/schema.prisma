@@ -1,0 +1,259 @@
+// Prisma Schema for Couple Home Application
+// 情侣小家 - 数据库设计
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 用户表
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  phone     String?  @unique
+  username  String
+  avatar    String?
+  password  String
+  gender    String?  // male, female, other
+  birthday  DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 情侣关系
+  coupleId String?
+  couple   Couple? @relation(fields: [coupleId], references: [id])
+
+  // 家务任务
+  tasks      Task[]
+  assignedTasks TaskAssignment[]
+
+  // 账单
+  bills      Bill[]
+  billShares BillShare[]
+
+  // 纪念日
+  anniversaries Anniversary[]
+
+  // 相册
+  moments    Moment[]
+
+  // 日程
+  calendars  Calendar[]
+
+  @@map("users")
+}
+
+// 情侣关系表
+model Couple {
+  id          String   @id @default(uuid())
+  name        String   // 情侣昵称，如"小明 & 小红"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  anniversary DateTime? // 纪念日
+
+  // 情侣双方
+  user1 User @relation("CoupleUser1", fields: [user1Id], references: [id])
+  user1Id String @unique
+
+  user2 User @relation("CoupleUser2", fields: [user2Id], references: [id])
+  user2Id String @unique
+
+  // 共同家务
+  tasks Task[]
+
+  // 共同账单
+  bills Bill[]
+
+  // 纪念日
+  anniversaries Anniversary[]
+
+  // 共享相册
+  moments Moment[]
+
+  // 共享日程
+  calendars Calendar[]
+
+  @@map("couples")
+}
+
+// 家务任务表
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  type        String   // daily, weekly, monthly, custom
+  frequency   Int      @default(1) // 重复频率
+  
+  // 任务状态
+  isCompleted Boolean  @default(false)
+  completedAt DateTime?
+  
+  // 分配给谁
+  assigneeId String?
+  assignee   User?    @relation(fields: [assigneeId], references: [id])
+
+  // 所属情侣
+  coupleId   String
+  couple     Couple   @relation(fields: [coupleId], references: [id])
+
+  // 任务分配记录
+  assignments TaskAssignment[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("tasks")
+}
+
+// 任务分配记录
+model TaskAssignment {
+  id          String   @id @default(uuid())
+  taskId      String
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  assignedAt  DateTime @default(now())
+  completedAt DateTime?
+  isCompleted Boolean  @default(false)
+
+  @@map("task_assignments")
+}
+
+// 账单表
+model Bill {
+  id          String   @id @default(uuid())
+  title       String
+  amount      Float
+  category    String   // food, transport, housing, entertainment, shopping, other
+  description String?
+  paidBy      String   // user1, user2, split
+  paidById    String
+  paidByUser  User     @relation(fields: [paidById], references: [id])
+  
+  // 所属情侣
+  coupleId    String
+  couple      Couple   @relation(fields: [coupleId], references: [id])
+
+  // 账单分摊
+  shares      BillShare[]
+
+  billDate    DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("bills")
+}
+
+// 账单分摊记录
+model BillShare {
+  id        String   @id @default(uuid())
+  billId    String
+  bill      Bill     @relation(fields: [billId], references: [id], onDelete: Cascade)
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  amount    Float    // 分摊金额
+  isPaid    Boolean  @default(false)
+  paidAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@map("bill_shares")
+}
+
+// 纪念日表
+model Anniversary {
+  id          String   @id @default(uuid())
+  title       String   // 纪念日名称
+  date        DateTime // 纪念日日期
+  type        String   // birthday, first_date, engagement, wedding, other
+  description String?
+  isRecurring Boolean  @default(true) // 是否每年重复
+  
+  // 所属用户
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  // 所属情侣
+  coupleId    String?
+  couple      Couple?  @relation(fields: [coupleId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("anniversaries")
+}
+
+// 相册/瞬间表
+model Moment {
+  id          String   @id @default(uuid())
+  title       String?
+  description String?
+  
+  // 图片 URLs (多个)
+  images      String[] 
+
+  // 位置
+  location    String?
+  latitude    Float?
+  longitude   Float?
+
+  // 所属用户
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  // 所属情侣 (共享相册)
+  coupleId    String?
+  couple      Couple?  @relation(fields: [coupleId], references: [id])
+
+  // 点赞
+  likes       Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("moments")
+}
+
+// 日程表
+model Calendar {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  
+  // 时间
+  startTime   DateTime
+  endTime     DateTime
+  
+  // 类型
+  type        String   // work, date, travel, shopping, entertainment, other
+  isAllDay    Boolean  @default(false)
+  
+  // 重复规则
+  isRecurring Boolean  @default(false)
+  recurrence  String?  // daily, weekly, monthly, yearly
+
+  // 提醒
+  reminder    Boolean  @default(true)
+  reminderTime DateTime?
+
+  // 所属用户
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  // 所属情侣 (共享日程)
+  coupleId    String?
+  couple      Couple?  @relation(fields: [coupleId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("calendars")
+}
