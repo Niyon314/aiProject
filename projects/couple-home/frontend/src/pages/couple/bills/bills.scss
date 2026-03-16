@@ -1,0 +1,48 @@
+.bills-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 30px;
+  
+  .header {
+    margin-bottom: 30px;
+    
+    .title {
+      font-size: 40px;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+  
+  .summary {
+    background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%);
+    border-radius: 16px;
+    padding: 40px 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    
+    .summary-item {
+      .amount {
+        font-size: 56px;
+        font-weight: bold;
+        color: #fff;
+        display: block;
+      }
+      
+      .label {
+        font-size: 26px;
+        color: rgba(255, 255, 255, 0.9);
+        margin-top: 10px;
+        display: block;
+      }
+    }
+  }
+  
+  .bill-list {
+    .empty-tip {
+      text-align: center;
+      color: #999;
+      font-size: 28px;
+      padding: 60px 0;
+    }
+  }
+}

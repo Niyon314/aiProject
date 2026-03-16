@@ -1,0 +1,174 @@
+/**
+ * 🎀 可爱按钮组件样式
+ */
+
+$primary-light: #FFD1DC;
+$primary-main: #FF6B81;
+$primary-dark: #FF4757;
+
+$secondary-lavender: #D4C1EC;
+$secondary-mint: #B8E6D5;
+
+$text-white: #FFFFFF;
+$text-primary: #4A4A4A;
+
+$shadow-soft: 0 4px 15px rgba(255, 107, 129, 0.15);
+$shadow-medium: 0 6px 20px rgba(255, 107, 129, 0.2);
+
+$radius-small: 12px;
+$radius-medium: 16px;
+$radius-large: 20px;
+
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+$font-xs: 24px;
+$font-sm: 28px;
+$font-md: 32px;
+$font-lg: 36px;
+
+.cute-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  // 📏 尺寸
+  &--small {
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-small;
+    font-size: $font-xs;
+  }
+  
+  &--medium {
+    padding: $spacing-md $spacing-xl;
+    border-radius: $radius-medium;
+    font-size: $font-sm;
+  }
+  
+  &--large {
+    padding: $spacing-lg $spacing-xl;
+    border-radius: $radius-large;
+    font-size: $font-md;
+  }
+  
+  // 🎨 类型
+  &--primary {
+    background: $primary-main;
+    color: $text-white;
+    box-shadow: $shadow-soft;
+    
+    &:active:not(&--disabled) {
+      background: $primary-dark;
+      transform: scale(0.98);
+      box-shadow: $shadow-medium;
+    }
+  }
+  
+  &--secondary {
+    background: $secondary-lavender;
+    color: $text-white;
+    box-shadow: $shadow-soft;
+    
+    &:active:not(&--disabled) {
+      background: darken($secondary-lavender, 10%);
+      transform: scale(0.98);
+    }
+  }
+  
+  &--outline {
+    background: transparent;
+    border: 2px solid $primary-main;
+    color: $primary-main;
+    
+    &:active:not(&--disabled) {
+      background: rgba(255, 107, 129, 0.1);
+      transform: scale(0.98);
+    }
+  }
+  
+  &--gradient {
+    background: linear-gradient(135deg, #FFD1DC 0%, #FF6B81 100%);
+    color: $text-white;
+    box-shadow: $shadow-soft;
+    
+    &:active:not(&--disabled) {
+      transform: scale(0.98);
+      box-shadow: $shadow-medium;
+    }
+  }
+  
+  // 🔒 禁用状态
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    
+    &:active {
+      transform: none;
+    }
+  }
+  
+  // ⏳ 加载状态
+  &--loading {
+    .button-loading-spinner {
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  // 📝 内部元素
+  .button-icon {
+    font-size: 1.2em;
+  }
+  
+  .button-text {
+    display: inline-block;
+  }
+  
+  .button-loading-spinner {
+    font-size: 1em;
+  }
+}
+
+// ✨ 动画
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// 🌟 光泽效果
+.cute-button--gradient::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  animation: shine 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}

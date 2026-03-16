@@ -1,52 +1,366 @@
+/**
+ * 情侣小家 - 首页样式
+ * 🌸💕🎀 少女可爱风格
+ */
+
+// 🎨 主题变量
+$primary-light: #FFD1DC;
+$primary-main: #FF6B81;
+$primary-dark: #FF4757;
+
+$secondary-mint: #B8E6D5;
+$secondary-lavender: #D4C1EC;
+$secondary-peach: #FFDAC1;
+$secondary-sky: #C4E0F5;
+$secondary-lemon: #FFF5BA;
+
+$bg-gradient: linear-gradient(135deg, #FFE5EC 0%, #FFB5C5 100%);
+
+$text-primary: #4A4A4A;
+$text-secondary: #888888;
+$text-light: #BBBBBB;
+$text-pink: #FF6B81;
+$text-white: #FFFFFF;
+
+$shadow-soft: 0 4px 15px rgba(255, 107, 129, 0.15);
+$shadow-medium: 0 6px 20px rgba(255, 107, 129, 0.2);
+$shadow-float: 0 10px 40px rgba(255, 107, 129, 0.3);
+
+$radius-small: 12px;
+$radius-medium: 16px;
+$radius-large: 20px;
+$radius-xl: 24px;
+
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+$font-xs: 24px;
+$font-sm: 28px;
+$font-md: 32px;
+$font-lg: 36px;
+$font-xl: 48px;
+$font-xxl: 64px;
+
+// 🌍 页面容器
 .index {
-  padding: 30px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFE5EC 0%, #FFB5C5 100%);
+  background: $bg-gradient;
+  padding: $spacing-lg;
+  position: relative;
+  overflow: hidden;
 }
 
-.welcome {
+// 🌸 顶部欢迎区
+.welcome-section {
+  position: relative;
+  padding: $spacing-xxl 0;
   text-align: center;
-  padding: 40px 0;
   
-  .title {
-    font-size: 48px;
-    font-weight: bold;
-    color: #FF6B81;
-    display: block;
-    margin-bottom: 10px;
+  .header-decorator {
+    position: relative;
+    height: 40px;
+    margin-bottom: $spacing-md;
+    
+    .decorator-icon {
+      position: absolute;
+      font-size: 40px;
+      animation: float 3s ease-in-out infinite;
+      
+      &.left {
+        left: 20%;
+        top: 0;
+      }
+      
+      &.right {
+        right: 20%;
+        top: 0;
+        animation-delay: 1.5s;
+      }
+    }
   }
   
-  .subtitle {
-    font-size: 28px;
-    color: #FF8FA3;
-    display: block;
+  .welcome-content {
+    position: relative;
+    z-index: 1;
+    
+    .greeting {
+      font-size: $font-sm;
+      color: $text-secondary;
+      display: block;
+      margin-bottom: $spacing-sm;
+    }
+    
+    .title {
+      font-size: $font-xxl;
+      font-weight: bold;
+      color: $primary-main;
+      display: block;
+      margin-bottom: $spacing-sm;
+      text-shadow: 2px 2px 4px rgba(255, 107, 129, 0.2);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .subtitle {
+      font-size: $font-md;
+      color: $text-secondary;
+      display: block;
+      font-weight: 500;
+    }
+  }
+  
+  .hearts-decoration {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100px;
+    pointer-events: none;
+    
+    .floating-heart {
+      position: absolute;
+      font-size: 32px;
+      animation: floatHeart 4s ease-in-out infinite;
+      opacity: 0.6;
+      
+      &:nth-child(1) {
+        left: 20%;
+        top: 0;
+      }
+      
+      &:nth-child(2) {
+        left: 50%;
+        top: 20px;
+      }
+      
+      &:nth-child(3) {
+        left: 80%;
+        top: 0;
+      }
+    }
   }
 }
 
-.quick-actions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-top: 40px;
+// 🎀 功能区
+.features-section {
+  margin-top: $spacing-xl;
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
+    
+    .section-icon {
+      font-size: $font-md;
+    }
+    
+    .section-title {
+      font-size: $font-lg;
+      font-weight: bold;
+      color: $primary-main;
+    }
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
 }
 
-.action-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  padding: 30px 20px;
+// 🎴 功能卡片
+.feature-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: $radius-xl;
+  padding: $spacing-xl $spacing-lg;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(255, 107, 129, 0.2);
+  box-shadow: $shadow-soft;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.8);
   
-  .icon {
+  &:active {
+    transform: scale(0.95);
+    box-shadow: $shadow-medium;
+  }
+  
+  .feature-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: $radius-round;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto $spacing-md;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .feature-icon {
     font-size: 48px;
-    display: block;
-    margin-bottom: 10px;
   }
   
-  .label {
-    font-size: 26px;
-    color: #333;
-    font-weight: 500;
+  .feature-label {
+    font-size: $font-sm;
+    font-weight: 600;
+    color: $text-primary;
     display: block;
   }
+  
+  .feature-shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 70%
+    );
+    animation: shine 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+}
+
+// 🍰 温馨提示区
+.tips-section {
+  margin-top: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  
+  .tips-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: $radius-xl;
+    padding: $spacing-lg;
+    box-shadow: $shadow-soft;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+    
+    .tips-header {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-md;
+      
+      .tips-icon {
+        font-size: $font-md;
+      }
+      
+      .tips-title {
+        font-size: $font-md;
+        font-weight: bold;
+        color: $primary-main;
+      }
+    }
+    
+    .tips-content {
+      font-size: $font-sm;
+      color: $text-secondary;
+      line-height: 1.6;
+      display: block;
+    }
+    
+    .tips-decoration {
+      display: flex;
+      justify-content: flex-end;
+      gap: $spacing-sm;
+      margin-top: $spacing-md;
+      font-size: $font-md;
+    }
+  }
+}
+
+// 🎀 底部装饰
+.footer-decoration {
+  text-align: center;
+  padding: $spacing-xl 0;
+  margin-top: $spacing-xl;
+  
+  .footer-text {
+    font-size: $font-xs;
+    color: $text-light;
+    display: block;
+    margin-bottom: $spacing-sm;
+  }
+  
+  .footer-emojis {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+    font-size: $font-md;
+  }
+}
+
+// ✨ 动画
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(10deg);
+  }
+}
+
+@keyframes floatHeart {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+// 🌟 背景装饰圆点
+.index::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  animation: float 4s ease-in-out infinite;
+}
+
+.index::after {
+  content: '';
+  position: absolute;
+  bottom: 20%;
+  left: 5%;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: float 5s ease-in-out infinite;
+  animation-delay: 2s;
 }

@@ -4,6 +4,7 @@ export default {
     'pages/index/index',
     'pages/login/login',
     'pages/profile/profile',
+    'pages/theme-showcase/theme-showcase',
     'pages/couple/tasks/tasks',
     'pages/couple/bills/bills',
     'pages/couple/moments/moments',
