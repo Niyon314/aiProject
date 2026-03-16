@@ -135,22 +135,31 @@ model TaskAssignment {
   @@map("task_assignments")
 }
 
-// 账单表
+// 💰 账单表 - 共同支出记录
 model Bill {
   id          String   @id @default(uuid())
-  title       String
-  amount      Float
-  category    String   // food, transport, housing, entertainment, shopping, other
-  description String?
+  title       String   // 账单标题
+  amount      Float    // 总金额
+  category    String   // food, transport, housing, entertainment, shopping, other, medical, education
+  description String?  // 详细描述
+  
+  // 支付信息
   paidBy      String   // user1, user2, split
   paidById    String
   paidByUser  User     @relation(fields: [paidById], references: [id])
+  
+  // 分摊模式
+  splitMode   String   @default("equal") // equal(平均 AA), ratio(按比例), custom(自定义), gift(这次我请)
+  splitRatio  Float?   // 用户 1 的分摊比例 (0-1)，仅在 ratio 模式下使用
+  
+  // 情感化备注
+  emotionalNote String? // "请你喝的奶茶，因为你今天加班辛苦了"
   
   // 所属情侣
   coupleId    String
   couple      Couple   @relation(fields: [coupleId], references: [id])
 
-  // 账单分摊
+  // 账单分摊记录
   shares      BillShare[]
 
   billDate    DateTime @default(now())
@@ -160,7 +169,7 @@ model Bill {
   @@map("bills")
 }
 
-// 账单分摊记录
+// 💕 账单分摊记录 - 记录每人应付金额
 model BillShare {
   id        String   @id @default(uuid())
   billId    String
@@ -170,7 +179,7 @@ model BillShare {
   user      User     @relation(fields: [userId], references: [id])
   
   amount    Float    // 分摊金额
-  isPaid    Boolean  @default(false)
+  isPaid    Boolean  @default(false) // 是否已结算
   paidAt    DateTime?
 
   createdAt DateTime @default(now())
