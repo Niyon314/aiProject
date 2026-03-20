@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Quicksand:wght@500;600;700&display=swap');
+
+:root {
+  --font-sans: 'Nunito', system-ui, sans-serif;
+  --font-heading: 'Quicksand', system-ui, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-sans);
+  background: linear-gradient(135deg, #FFE5EC 0%, #FFB5C5 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 107, 129, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 107, 129, 0.5);
+}
+
+/* 触摸目标 */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* 防止双击缩放 */
+* {
+  touch-action: manipulation;
+}
+
+/* 卡片组件 */
+.card {
+  @apply bg-white rounded-md shadow-sm border border-primary-light;
+  @apply transition-all duration-200 ease-out;
+}
+
+.card:hover {
+  @apply shadow-md -translate-y-0.5;
+}
+
+.card-primary {
+  @apply bg-gradient-to-br from-primary-light to-primary;
+  @apply border-none text-white;
+}
+
+/* 按钮组件 */
+.btn {
+  @apply inline-flex items-center justify-center;
+  @apply px-6 py-3 rounded-full;
+  @apply font-heading font-semibold text-base;
+  @apply transition-all duration-200 ease-out;
+  @apply cursor-pointer border-none outline-none;
+  @apply touch-target;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-br from-primary-dark to-primary-darker;
+  @apply text-white shadow-sm;
+}
+
+.btn-primary:hover {
+  @apply shadow-md -translate-y-0.5;
+}
+
+.btn-primary:active {
+  @apply scale-95;
+}
+
+.btn-secondary {
+  @apply bg-white text-primary-dark;
+  @apply border-2 border-primary;
+}
+
+.btn-ghost {
+  @apply bg-transparent text-gray-500;
+}
+
+/* 输入框组件 */
+.input {
+  @apply w-full px-4 py-3;
+  @apply border-2 border-gray-200 rounded-md;
+  @apply font-sans text-base;
+  @apply transition-all duration-200 ease-out;
+  @apply bg-white;
+}
+
+.input:focus {
+  @apply outline-none border-primary;
+  @apply shadow-[0_0_0_3px_rgba(255,181,197,0.2)];
+}
+
+.input::placeholder {
+  @apply text-gray-400;
+}
+
+/* 底部导航 */
+.tab-bar {
+  @apply fixed bottom-0 left-0 right-0;
+  @apply h-[60px] bg-white;
+  @apply border-t border-primary-light;
+  @apply flex justify-around items-center;
+  @apply shadow-[0_-2px_8px_rgba(255,107,129,0.08)];
+  @apply z-50;
+}
+
+.tab-item {
+  @apply flex flex-col items-center gap-1;
+  @apply text-gray-400 text-xs;
+  @apply transition-all duration-200 ease-out;
+  @apply cursor-pointer;
+}
+
+.tab-item.active {
+  @apply text-primary-dark;
+}
+
+.tab-item-icon {
+  @apply text-2xl;
+}
+
+.tab-item.active .tab-item-icon {
+  animation: bounce 600ms ease-in-out;
+}
+
+/* 动画类 */
+.animate-float {
+  animation: float 2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 400ms ease-out;
+}
+
+.animate-slide-in {
+  animation: slide-in 350ms ease-out;
+}
+
+.animate-heart-beat {
+  animation: heart-beat 1s ease-in-out infinite;
+}
+
+/* 页面容器 */
+.page-container {
+  @apply min-h-screen pb-[80px];
+  @apply px-4 py-6;
+}
+
+/* 安全区域 */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}

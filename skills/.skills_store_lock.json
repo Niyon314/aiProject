@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "frontend": {
+      "name": "Frontend Design",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=frontend",
+      "source": "skillhub",
+      "version": "1.0.2"
+    },
+    "superdesign": {
+      "name": "SuperDesign",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=superdesign",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "browser-use": {
+      "name": "Browser Use",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=browser-use",
+      "source": "skillhub",
+      "version": "1.0.2"
+    },
+    "code": {
+      "name": "code",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=code",
+      "source": "skillhub",
+      "version": ""
+    }
+  }
+}
