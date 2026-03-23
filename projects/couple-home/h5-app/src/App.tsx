@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
+import Anniversaries from './pages/Anniversaries';
 import Add from './pages/Add';
 import Chores from './pages/Chores';
 import Leaderboard from './pages/Leaderboard';
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/schedule" element={<Schedule />} />
+        <Route path="/anniversaries" element={<Anniversaries />} />
         <Route path="/add" element={<Add />} />
         <Route path="/chores" element={<Chores />} />
         <Route path="/chores/leaderboard" element={<Leaderboard />} />

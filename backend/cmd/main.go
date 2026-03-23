@@ -43,6 +43,8 @@ func main() {
 		&models.Chore{},
 		&models.ChoreTemplate{},
 		&models.UserStats{},
+		&models.Schedule{},
+		&models.Anniversary{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -54,6 +56,8 @@ func main() {
 	fundRepo := repository.NewFundRepository(db)
 	mealRepo := repository.NewMealRepository(db)
 	choreRepo := repository.NewChoreRepository(db)
+	scheduleRepo := repository.NewScheduleRepository(db)
+	anniversaryRepo := repository.NewAnniversaryRepository(db)
 
 	// Initialize services
 	fridgeService := service.NewFridgeService(fridgeRepo)
@@ -62,6 +66,8 @@ func main() {
 	fundService := service.NewFundService(fundRepo)
 	mealService := service.NewMealService(mealRepo, recipeRepo)
 	choreService := service.NewChoreService(choreRepo)
+	scheduleService := service.NewScheduleService(scheduleRepo)
+	anniversaryService := service.NewAnniversaryService(anniversaryRepo)
 
 	// Initialize handlers
 	fridgeHandler := handlers.NewFridgeHandler(fridgeService)
@@ -70,6 +76,8 @@ func main() {
 	fundHandler := handlers.NewFundHandler(fundService)
 	mealHandler := handlers.NewMealHandler(mealService)
 	choreHandler := handlers.NewChoreHandler(choreService)
+	scheduleHandler := handlers.NewScheduleHandler(scheduleService)
+	anniversaryHandler := handlers.NewAnniversaryHandler(anniversaryService)
 
 	// Initialize router
 	router := gin.Default()
@@ -165,6 +173,31 @@ func main() {
 				fund.PUT("/:id", fundHandler.UpdateFund)
 				fund.POST("/contribute", fundHandler.ContributeToFund)
 			}
+		}
+
+		// Schedule routes
+		schedules := api.Group("/schedules")
+		{
+			schedules.GET("", scheduleHandler.GetSchedules)
+			schedules.POST("", scheduleHandler.CreateSchedule)
+			schedules.GET("/upcoming", scheduleHandler.GetUpcoming)
+			schedules.GET("/:id", scheduleHandler.GetScheduleByID)
+			schedules.PUT("/:id", scheduleHandler.UpdateSchedule)
+			schedules.DELETE("/:id", scheduleHandler.DeleteSchedule)
+			schedules.PATCH("/:id/status", scheduleHandler.UpdateScheduleStatus)
+		}
+
+		// Anniversary routes
+		anniversaries := api.Group("/anniversaries")
+		{
+			anniversaries.GET("", anniversaryHandler.GetAnniversaries)
+			anniversaries.POST("", anniversaryHandler.CreateAnniversary)
+			anniversaries.GET("/upcoming", anniversaryHandler.GetUpcoming)
+			anniversaries.GET("/days", anniversaryHandler.GetDaysTogether)
+			anniversaries.GET("/:id", anniversaryHandler.GetAnniversaryByID)
+			anniversaries.PUT("/:id", anniversaryHandler.UpdateAnniversary)
+			anniversaries.DELETE("/:id", anniversaryHandler.DeleteAnniversary)
+			anniversaries.GET("/:id/progress", anniversaryHandler.GetAnniversaryProgress)
 		}
 	}
 

@@ -1,113 +1,99 @@
-import { useEffect } from 'react';
-import { useAppStore } from '../store/appStore';
+import { useEffect, useState } from 'react';
+import { useScheduleStore } from '../store/scheduleStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
+import Calendar from '../components/Calendar';
+import ScheduleList from '../components/ScheduleList';
+import type { Schedule } from '../api/scheduleApi';
 
 export default function Schedule() {
-  const { loadChores, loadBills, chores, bills } = useAppStore();
+  const { schedules, loadSchedules, loadUpcoming } = useScheduleStore();
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
-    loadChores();
-    loadBills();
+    loadSchedules();
+    loadUpcoming();
   }, []);
 
-  const today = new Date().toISOString().split('T')[0];
-  const todayChores = chores.filter(c => c.dueDate === today && c.status === 'pending');
-  const todayBills = bills.filter(b => b.date === today && b.status === 'pending');
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date === selectedDate ? null : date);
+  };
+
+  const filteredSchedules = selectedDate
+    ? schedules.filter(s => s.startTime.startsWith(selectedDate))
+    : schedules;
+
+  const handleEdit = (schedule: Schedule) => {
+    console.log('Edit schedule:', schedule);
+    // TODO: 打开编辑表单
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm('确定要删除这个日程吗？')) {
+      // TODO: 调用 store 的 deleteSchedule
+      console.log('Delete schedule:', id);
+    }
+  };
 
   return (
-    <div className="min-h-screen pb-[80px] animate-fade-in">
+    <div className="min-h-screen pb-[80px] animate-fade-in bg-gradient-to-b from-pink-100 to-rose-100">
       <Header 
-        title="日程" 
+        title="📅 日程管理" 
         showNotification
         onBack={() => window.history.back()}
       />
       
       <div className="px-4 py-6 space-y-6">
-        {/* 今日概览 */}
-        <div className="bg-white rounded-md p-4 shadow-md">
-          <h3 className="font-heading font-semibold text-gray-800 mb-2">
-            📅 今日安排
-          </h3>
-          <p className="text-gray-600 text-sm">
-            {new Date().toLocaleDateString('zh-CN', { 
-              month: 'long', 
-              day: 'numeric',
-              weekday: 'long'
-            })}
-          </p>
-          
-          <div className="mt-4 flex gap-4">
-            <div className="flex-1 bg-macaron-blue/20 rounded-md p-3 text-center">
-              <p className="text-2xl mb-1">🧹</p>
-              <p className="text-lg font-bold text-gray-700">{todayChores.length}</p>
-              <p className="text-xs text-gray-500">待完成家务</p>
-            </div>
-            <div className="flex-1 bg-macaron-yellow/20 rounded-md p-3 text-center">
-              <p className="text-2xl mb-1">💰</p>
-              <p className="text-lg font-bold text-gray-700">{todayBills.length}</p>
-              <p className="text-xs text-gray-500">待确认账单</p>
-            </div>
+        {/* 日历视图 */}
+        <Calendar 
+          schedules={schedules}
+          onDateSelect={handleDateSelect}
+        />
+
+        {/* 选中日期提示 */}
+        {selectedDate && (
+          <div className="bg-white rounded-xl p-3 shadow-md flex items-center justify-between">
+            <span className="text-pink-500 font-semibold">
+              📌 {new Date(selectedDate).toLocaleDateString('zh-CN', {
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long',
+              })}
+            </span>
+            <button
+              onClick={() => setSelectedDate(null)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              ✕ 清除筛选
+            </button>
           </div>
+        )}
+
+        {/* 日程列表 */}
+        <div>
+          <ScheduleList
+            schedules={filteredSchedules}
+            title={selectedDate ? '当天日程' : '全部日程'}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            emptyMessage={
+              selectedDate
+                ? '这天还没有安排哦~'
+                : '暂无日程安排'
+            }
+          />
         </div>
 
-        {/* 今日家务 */}
-        {todayChores.length > 0 && (
-          <div>
-            <h2 className="text-white text-lg font-heading font-semibold mb-3">
-              🧹 今日家务
-            </h2>
-            <div className="space-y-2">
-              {todayChores.map(chore => (
-                <div key={chore.id} className="bg-white rounded-md p-3 shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{chore.icon}</span>
-                    <div className="flex-1">
-                      <p className="font-semibold text-gray-800">{chore.name}</p>
-                      <p className="text-xs text-gray-500">⭐ {chore.points} 积分</p>
-                    </div>
-                    <span className="text-xs bg-macaron-blue text-gray-700 px-2 py-1 rounded-full">
-                      待完成
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 今日账单 */}
-        {todayBills.length > 0 && (
-          <div>
-            <h2 className="text-white text-lg font-heading font-semibold mb-3">
-              💰 今日账单
-            </h2>
-            <div className="space-y-2">
-              {todayBills.map(bill => (
-                <div key={bill.id} className="bg-white rounded-md p-3 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold text-gray-800">🧾 {bill.title}</p>
-                      <p className="text-xs text-gray-500">{bill.category}</p>
-                    </div>
-                    <span className="text-primary-dark font-bold">
-                      ¥{bill.amount.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 空状态 */}
-        {todayChores.length === 0 && todayBills.length === 0 && (
-          <div className="bg-white/20 backdrop-blur-sm rounded-md p-8 text-center text-white">
-            <p className="text-5xl mb-3">🌸</p>
-            <p className="text-lg font-heading">今天没有待办事项</p>
-            <p className="text-sm opacity-80">好好享受二人世界吧~</p>
-          </div>
-        )}
+        {/* 添加按钮 */}
+        <button
+          className="fixed bottom-24 right-4 w-14 h-14 bg-gradient-to-br from-pink-400 to-rose-400 text-white rounded-full shadow-lg flex items-center justify-center text-3xl hover:scale-110 transition-transform animate-float"
+          onClick={() => {
+            // TODO: 打开创建日程表单
+            console.log('Add new schedule');
+          }}
+        >
+          ➕
+        </button>
       </div>
 
       <TabBar activeTab="fridge" />

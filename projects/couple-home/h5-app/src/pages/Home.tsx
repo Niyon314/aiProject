@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import AnniversaryCard from '../components/AnniversaryCard';
 import VoteCard from '../components/VoteCard';
 import QuickActions from '../components/QuickActions';
+import type { Anniversary } from '../api/anniversaryApi';
 
 export default function Home() {
   const { 
@@ -65,7 +66,7 @@ export default function Home() {
         {/* 纪念日卡片 */}
         {anniversaries.length > 0 && (
           <AnniversaryCard 
-            anniversary={anniversaries[0]}
+            anniversary={anniversaries[0] as unknown as Anniversary}
             daysTogether={calculateDaysTogether(anniversaries[0].date)}
           />
         )}
