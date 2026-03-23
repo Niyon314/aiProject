@@ -142,18 +142,59 @@ export const useAppStore = create<AppState>((set, get) => ({
     await get().loadChores();
   },
   
-  // Bills actions
+  // Bills actions - 使用后端 API
   loadBills: async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/bills');
+      if (response.ok) {
+        const data = await response.json();
+        set({ bills: data.data || [] });
+        return;
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local DB:', error);
+    }
     const bills = await db.getBills();
     set({ bills });
   },
   
   addBill: async (bill) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/bills', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: bill.title,
+          amount: bill.amount,
+          payer: bill.payer,
+          category: bill.category,
+        }),
+      });
+      if (response.ok) {
+        await get().loadBills();
+        return;
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local DB:', error);
+    }
     await db.addBill(bill);
     await get().loadBills();
   },
   
   confirmBill: async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/bills/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'confirmed' }),
+      });
+      if (response.ok) {
+        await get().loadBills();
+        return;
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local DB:', error);
+    }
     await db.updateBill(id, { status: 'confirmed' });
     await get().loadBills();
   },
@@ -177,23 +218,78 @@ export const useAppStore = create<AppState>((set, get) => ({
     return Math.floor(diff / (1000 * 60 * 60 * 24));
   },
   
-  // Fridge Items actions
+  // Fridge Items actions - 使用后端 API
   loadFridgeItems: async () => {
+    try {
+      // 先尝试从后端 API 获取
+      const response = await fetch('http://localhost:8080/api/fridge');
+      if (response.ok) {
+        const data = await response.json();
+        set({ fridgeItems: data.data || [] });
+        return;
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local DB:', error);
+    }
+    // Fallback to local DB
     const fridgeItems = await db.getFridgeItems();
     set({ fridgeItems });
   },
   
   addFridgeItem: async (item) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/fridge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: item.name,
+          quantity: item.quantity,
+          unit: item.unit,
+          category: item.category,
+          expiryDate: item.expiryDate,
+        }),
+      });
+      if (response.ok) {
+        await get().loadFridgeItems();
+        return;
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local DB:', error);
+    }
     await db.addFridgeItem(item);
     await get().loadFridgeItems();
   },
   
   updateFridgeItem: async (id, updates) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/fridge/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (response.ok) {
+        await get().loadFridgeItems();
+        return;
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local DB:', error);
+    }
     await db.updateFridgeItem(id, updates);
     await get().loadFridgeItems();
   },
   
   deleteFridgeItem: async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/fridge/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        await get().loadFridgeItems();
+        return;
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local DB:', error);
+    }
     await db.deleteFridgeItem(id);
     await get().loadFridgeItems();
   },
@@ -253,6 +349,16 @@ export const useAppStore = create<AppState>((set, get) => ({
   
   // Expiry status checker
   checkExpiryStatus: (expiryDate) => {
+    const now = new Date();
+    const expiry = new Date(expiryDate);
+    const diffDays = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) return 'expired';
+    if (diffDays <= 3) return 'warning';
+    return 'fresh';
+  },
+}));
+ checkExpiryStatus: (expiryDate) => {
     const now = new Date();
     const expiry = new Date(expiryDate);
     const diffDays = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));

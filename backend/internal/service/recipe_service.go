@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"math"
-	"math/rand"
 	"strings"
 	"time"
 
 	"couple-home/backend/internal/models"
 	"couple-home/backend/internal/repository"
+	"couple-home/backend/pkg/utils"
 )
 
 // RecipeService - 菜谱业务逻辑层
@@ -34,7 +34,7 @@ func (s *RecipeService) GetRandomRecipes(ctx context.Context, limit int) ([]mode
 }
 
 func (s *RecipeService) CreateRecipe(ctx context.Context, recipe *models.Recipe) error {
-	recipe.ID = generateID()
+	recipe.ID = utils.GenerateID()
 	return s.repo.Create(ctx, recipe)
 }
 
@@ -170,7 +170,7 @@ func (s *RecipeService) VoteRecipe(ctx context.Context, recipeID, voter string, 
 	}
 
 	vote := &models.RecipeVote{
-		ID:        generateID(),
+		ID:        utils.GenerateID(),
 		RecipeID:  recipeID,
 		Voter:     voter,
 		Rating:    rating,

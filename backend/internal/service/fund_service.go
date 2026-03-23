@@ -6,6 +6,7 @@ import (
 
 	"couple-home/backend/internal/models"
 	"couple-home/backend/internal/repository"
+	"couple-home/backend/pkg/utils"
 )
 
 // FundService - 基金业务逻辑层
@@ -26,7 +27,7 @@ func (s *FundService) GetFund(ctx context.Context, id string) (*models.CommonFun
 }
 
 func (s *FundService) CreateFund(ctx context.Context, fund *models.CommonFund) error {
-	fund.ID = generateID()
+	fund.ID = utils.GenerateID()
 	fund.CreatedAt = time.Now()
 	return s.fundRepo.Create(ctx, fund)
 }
@@ -45,7 +46,7 @@ func (s *FundService) ContributeToFund(ctx context.Context, fundID, contributor 
 
 	// Create contribution record
 	contribution := &models.FundContribution{
-		ID:          generateID(),
+		ID:          utils.GenerateID(),
 		FundID:      fundID,
 		Amount:      amount,
 		Contributor: contributor,

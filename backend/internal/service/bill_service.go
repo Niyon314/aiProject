@@ -7,6 +7,7 @@ import (
 
 	"couple-home/backend/internal/models"
 	"couple-home/backend/internal/repository"
+	"couple-home/backend/pkg/utils"
 )
 
 var (
@@ -36,7 +37,7 @@ func (s *BillService) GetBill(ctx context.Context, id string) (*models.Bill, err
 }
 
 func (s *BillService) CreateBill(ctx context.Context, bill *models.Bill) error {
-	bill.ID = generateID()
+	bill.ID = utils.GenerateID()
 	bill.CreatedAt = time.Now()
 	return s.billRepo.Create(ctx, bill)
 }
@@ -59,6 +60,7 @@ func (s *BillService) GetStats(ctx context.Context) (map[string]interface{}, err
 	total := stats["total"]
 	userTotal := stats["user_total"]
 	partnerTotal := stats["partner_total"]
+	sharedTotal := stats["shared_total"]
 
 	// Calculate contribution percentages
 	var userPercent, partnerPercent float64
@@ -68,12 +70,12 @@ func (s *BillService) GetStats(ctx context.Context) (map[string]interface{}, err
 	}
 
 	return map[string]interface{}{
-		"total":            total,
-		"user_total":       userTotal,
-		"partner_total":    partnerTotal,
-		"user_percentage":  userPercent,
+		"total":              total,
+		"user_total":         userTotal,
+		"partner_total":      partnerTotal,
+		"user_percentage":    userPercent,
 		"partner_percentage": partnerPercent,
-		"shared_total":     stats["shared_total"],
+		"shared_total":       sharedTotal,
 	}, nil
 }
 
@@ -82,7 +84,12 @@ func (s *BillService) GetMonthlyStats(ctx context.Context, year, month int) (map
 	if err != nil {
 		return nil, err
 	}
-	return stats, nil
+	// Convert map[string]float64 to map[string]interface{}
+	result := make(map[string]interface{})
+	for k, v := range stats {
+		result[k] = v
+	}
+	return result, nil
 }
 
 // GetBillsByDateRange - 获取指定日期范围的账单

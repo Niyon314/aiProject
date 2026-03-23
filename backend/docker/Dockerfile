@@ -22,17 +22,19 @@ COPY . .
 # Build the application (CGO enabled for SQLite)
 RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/main.go
 
-# Final stage
-FROM alpine:latest
+# Final stage - use debian-slim for glibc compatibility
+FROM debian:bookworm-slim
 
 WORKDIR /root/
 
 # Install runtime dependencies
-RUN apk add --no-cache ca-certificates
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy the binary from builder
 COPY --from=builder /app/main .
-COPY --from=builder /app/data/ ./data/ 2>/dev/null || true
 
 # Expose port
 EXPOSE 8080
@@ -42,4 +44,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
 
 # Run the application
-CMD ["./main"]
+CMD ["/root/main"]

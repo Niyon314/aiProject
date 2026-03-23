@@ -6,6 +6,7 @@ import (
 
 	"couple-home/backend/internal/models"
 	"couple-home/backend/internal/repository"
+	"couple-home/backend/pkg/utils"
 )
 
 // FridgeService - 冰箱业务逻辑层
@@ -26,7 +27,7 @@ func (s *FridgeService) GetItem(ctx context.Context, id string) (*models.FridgeI
 }
 
 func (s *FridgeService) AddItem(ctx context.Context, item *models.FridgeItem) error {
-	item.ID = generateID()
+	item.ID = utils.GenerateID()
 	item.AddedAt = time.Now()
 	return s.repo.Create(ctx, item)
 }

@@ -1,12 +1,12 @@
-package service
+package utils
 
 import (
 	"crypto/rand"
 	"encoding/hex"
 )
 
-// generateID - 生成唯一 ID (UUID-like)
-func generateID() string {
+// GenerateID - 生成唯一 ID (UUID-like)
+func GenerateID() string {
 	b := make([]byte, 16)
 	rand.Read(b)
 	return hex.EncodeToString(b[:8])

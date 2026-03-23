@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"couple-home/backend/config"
 	"couple-home/backend/internal/handlers"
@@ -100,7 +99,6 @@ func main() {
 			recipes.GET("", recipeHandler.GetAllRecipes)
 			recipes.GET("/random", recipeHandler.GetRandomRecipes)
 			recipes.GET("/:id", recipeHandler.GetRecipe)
-			recipes.POST("", recipeHandler.CreateRecipe) // For admin
 			recipes.POST("/recommend", recipeHandler.RecommendRecipes)
 			recipes.POST("/:id/vote", recipeHandler.VoteRecipe)
 		}
@@ -149,12 +147,12 @@ func initDatabase(cfg *config.Config) (*gorm.DB, error) {
 		})
 	} else {
 		// PostgreSQL support
-		dsn := "host=" + cfg.Database.Host +
-			" user=" + cfg.Database.User +
-			" password=" + cfg.Database.Password +
-			" dbname=" + cfg.Database.DBName +
-			" port=" + cfg.Database.Port +
-			" sslmode=disable"
+		// dsn := "host=" + cfg.Database.Host +
+		// 	" user=" + cfg.Database.User +
+		// 	" password=" + cfg.Database.Password +
+		// 	" dbname=" + cfg.Database.DBName +
+		// 	" port=" + cfg.Database.Port +
+		// 	" sslmode=disable"
 		// db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		log.Println("PostgreSQL support available, configure driver import")
 		return nil, err
