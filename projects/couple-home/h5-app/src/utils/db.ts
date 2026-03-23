@@ -1,7 +1,7 @@
 import { openDB, type IDBPDatabase } from 'idb';
 
 const DB_NAME = 'couple-home-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // 升级版本以清除旧缓存
 
 export interface Vote {
   id: string;

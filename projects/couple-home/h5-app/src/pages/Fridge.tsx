@@ -232,8 +232,8 @@ export default function Fridge() {
 
         {/* 添加 Modal */}
         {showAddModal && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
-            <div className="bg-white rounded-t-lg w-full p-6 animate-slide-in">
+          <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-md p-6 animate-fade-in shadow-2xl max-h-[90vh] overflow-y-auto">
               <h3 className="text-lg font-heading font-semibold mb-4">添加食材</h3>
               
               <form onSubmit={handleAddItem} className="space-y-4">
