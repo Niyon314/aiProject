@@ -66,14 +66,15 @@ export default function Fridge() {
     const expiryDate = formData.get('expiryDate') as string;
     const status = checkExpiryStatus(expiryDate);
     
+    // 修复：使用完整 ISO 8601 格式，避免时区问题
     const newItem: FridgeItem = {
       id: Date.now().toString(),
       name: formData.get('name') as string,
       quantity: parseFloat(formData.get('quantity') as string),
       unit: formData.get('unit') as string,
       category: formData.get('category') as FridgeItem['category'],
-      expiryDate,
-      addedDate: new Date().toISOString().split('T')[0],
+      expiryDate: new Date(expiryDate).toISOString(), // 转换为完整 ISO 格式
+      addedDate: new Date().toISOString(),
       status,
     };
 
@@ -91,12 +92,13 @@ export default function Fridge() {
     const expiryDate = formData.get('expiryDate') as string;
     const status = checkExpiryStatus(expiryDate);
     
+    // 修复：使用完整 ISO 8601 格式
     await updateFridgeItem(editingItem.id, {
       name: formData.get('name') as string,
       quantity: parseFloat(formData.get('quantity') as string),
       unit: formData.get('unit') as string,
       category: formData.get('category') as FridgeItem['category'],
-      expiryDate,
+      expiryDate: new Date(expiryDate).toISOString(), // 转换为完整 ISO 格式
       status,
     });
     
