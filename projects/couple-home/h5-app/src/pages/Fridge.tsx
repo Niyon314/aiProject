@@ -330,8 +330,8 @@ export default function Fridge() {
 
         {/* 编辑 Modal */}
         {editingItem && (
-          <div className="fixed inset-0 bg-black/50 z-[100] flex items-end justify-center">
-            <div className="bg-white rounded-t-2xl w-full max-w-md p-6 animate-slide-in shadow-2xl">
+          <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-md p-6 animate-fade-in shadow-2xl max-h-[90vh] overflow-y-auto">
               <h3 className="text-lg font-heading font-semibold mb-4">编辑食材</h3>
               
               <form onSubmit={handleUpdateItem} className="space-y-4">
