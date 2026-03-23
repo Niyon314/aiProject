@@ -117,6 +117,25 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 
 Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
 
+### 🔒 Skill Installation Security Policy
+
+**MANDATORY: Before installing ANY skill from ClawHub, GitHub, or other sources:**
+
+1. **Run skill-vetter first** - Always vet before installing
+2. **Follow the vetting protocol** - Source check → Code review → Permission scope → Risk classification
+3. **Never skip vetting** - No exceptions, even for "official" skills
+4. **Document the vetting report** - Save the report for future reference
+
+```
+Installation Workflow:
+1. clawhub inspect <skill-name>     # Get metadata
+2. Review SKILL.md manually         # Read the code
+3. Check for red flags              # Use skill-vetter protocol
+4. clawhub install <skill-name>     # Only if vetting passes
+```
+
+**Red flags = immediate rejection** (see skill-vetter/SKILL.md for full list)
+
 **🎭 Voice Storytelling:** If you have `sag` (ElevenLabs TTS), use voice for stories, movie summaries, and "storytime" moments! Way more engaging than walls of text. Surprise people with funny voices.
 
 **📝 Platform Formatting:**
