@@ -8,6 +8,20 @@ interface QuickActionsProps {
 export default function QuickActions({ pendingChores, pendingBills }: QuickActionsProps) {
   const actions = [
     {
+      icon: '🧊',
+      label: '冰箱',
+      sublabel: '管理食材',
+      path: '/fridge',
+      color: 'from-macaron-blue to-macaron-green',
+    },
+    {
+      icon: '🎲',
+      label: '吃什么',
+      sublabel: '随机推荐',
+      path: '/eating/random',
+      color: 'from-macaron-yellow to-macaron-peach',
+    },
+    {
       icon: '🧹',
       label: '家务',
       sublabel: pendingChores > 0 ? `待完成 ${pendingChores}` : '已完成',
@@ -17,23 +31,9 @@ export default function QuickActions({ pendingChores, pendingBills }: QuickActio
     {
       icon: '💰',
       label: '账单',
-      sublabel: pendingBills > 0 ? `待 AA ${pendingBills}` : '已结清',
+      sublabel: pendingBills > 0 ? `待确认 ${pendingBills}` : '已结清',
       path: '/bills',
       color: pendingBills > 0 ? 'from-macaron-yellow to-macaron-peach' : 'from-gray-200 to-gray-300',
-    },
-    {
-      icon: '📅',
-      label: '日程',
-      sublabel: '今晚 7 点 约会',
-      path: '/schedule',
-      color: 'from-macaron-green to-macaron-blue',
-    },
-    {
-      icon: '📸',
-      label: '回忆',
-      sublabel: '3 天前 上传',
-      path: '/moments',
-      color: 'from-macaron-purple to-macaron-peach',
     },
   ];
 

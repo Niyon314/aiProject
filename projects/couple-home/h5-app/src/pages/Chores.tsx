@@ -250,7 +250,7 @@ export default function Chores() {
         )}
       </div>
 
-      <TabBar activeTab="schedule" />
+      <TabBar activeTab="fridge" />
     </div>
   );
 }

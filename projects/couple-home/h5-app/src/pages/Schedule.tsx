@@ -110,7 +110,7 @@ export default function Schedule() {
         )}
       </div>
 
-      <TabBar activeTab="schedule" />
+      <TabBar activeTab="fridge" />
     </div>
   );
 }

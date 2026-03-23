@@ -54,6 +54,53 @@ export interface Anniversary {
   daysTogether: number;
 }
 
+// 冰箱食材
+export interface FridgeItem {
+  id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+  category: 'vegetable' | 'meat' | 'egg' | 'staple' | 'other';
+  expiryDate: string;
+  addedDate: string;
+  status: 'fresh' | 'warning' | 'expired';
+}
+
+// 推荐偏好
+export interface FoodPreference {
+  id: string;
+  mealName: string;
+  disliked: boolean;
+  createdAt: string;
+}
+
+// 共同基金
+export interface Fund {
+  id: string;
+  name: string;
+  targetAmount: number;
+  currentAmount: number;
+  icon: string;
+  deadline?: string;
+}
+
+// 人情记录
+export interface Favor {
+  id: string;
+  title: string;
+  amount: number;
+  type: 'give' | 'receive';
+  person: string;
+  date: string;
+  note?: string;
+}
+
+// 扩展 Bill 接口 (移除 AA 相关)
+export interface BillExtended extends Bill {
+  fundContribution?: boolean; // 是否计入共同基金
+  favorId?: string; // 关联的人情记录
+}
+
 class Database {
   private db: IDBPDatabase | null = null;
 
@@ -89,6 +136,31 @@ class Database {
         // Anniversaries store
         if (!db.objectStoreNames.contains('anniversaries')) {
           db.createObjectStore('anniversaries', { keyPath: 'id' });
+        }
+
+        // Fridge items store
+        if (!db.objectStoreNames.contains('fridgeItems')) {
+          const fridgeStore = db.createObjectStore('fridgeItems', { keyPath: 'id' });
+          fridgeStore.createIndex('category', 'category');
+          fridgeStore.createIndex('status', 'status');
+          fridgeStore.createIndex('expiryDate', 'expiryDate');
+        }
+
+        // Food preferences store
+        if (!db.objectStoreNames.contains('foodPreferences')) {
+          db.createObjectStore('foodPreferences', { keyPath: 'id' });
+        }
+
+        // Funds store
+        if (!db.objectStoreNames.contains('funds')) {
+          db.createObjectStore('funds', { keyPath: 'id' });
+        }
+
+        // Favors store
+        if (!db.objectStoreNames.contains('favors')) {
+          const favorStore = db.createObjectStore('favors', { keyPath: 'id' });
+          favorStore.createIndex('type', 'type');
+          favorStore.createIndex('date', 'date');
         }
       },
     });
@@ -205,6 +277,94 @@ class Database {
     }
   }
 
+  // Fridge Items CRUD
+  async getFridgeItems(): Promise<FridgeItem[]> {
+    const db = await this.init();
+    return db.getAll('fridgeItems');
+  }
+
+  async addFridgeItem(item: FridgeItem) {
+    const db = await this.init();
+    await db.put('fridgeItems', item);
+  }
+
+  async updateFridgeItem(id: string, updates: Partial<FridgeItem>) {
+    const db = await this.init();
+    const item = await db.get('fridgeItems', id);
+    if (item) {
+      await db.put('fridgeItems', { ...item, ...updates });
+    }
+  }
+
+  async deleteFridgeItem(id: string) {
+    const db = await this.init();
+    await db.delete('fridgeItems', id);
+  }
+
+  // Food Preferences CRUD
+  async getFoodPreferences(): Promise<FoodPreference[]> {
+    const db = await this.init();
+    return db.getAll('foodPreferences');
+  }
+
+  async addFoodPreference(preference: FoodPreference) {
+    const db = await this.init();
+    await db.put('foodPreferences', preference);
+  }
+
+  async deleteFoodPreference(id: string) {
+    const db = await this.init();
+    await db.delete('foodPreferences', id);
+  }
+
+  // Funds CRUD
+  async getFunds(): Promise<Fund[]> {
+    const db = await this.init();
+    return db.getAll('funds');
+  }
+
+  async addFund(fund: Fund) {
+    const db = await this.init();
+    await db.put('funds', fund);
+  }
+
+  async updateFund(id: string, updates: Partial<Fund>) {
+    const db = await this.init();
+    const fund = await db.get('funds', id);
+    if (fund) {
+      await db.put('funds', { ...fund, ...updates });
+    }
+  }
+
+  async deleteFund(id: string) {
+    const db = await this.init();
+    await db.delete('funds', id);
+  }
+
+  // Favors CRUD
+  async getFavors(): Promise<Favor[]> {
+    const db = await this.init();
+    return db.getAll('favors');
+  }
+
+  async addFavor(favor: Favor) {
+    const db = await this.init();
+    await db.put('favors', favor);
+  }
+
+  async updateFavor(id: string, updates: Partial<Favor>) {
+    const db = await this.init();
+    const favor = await db.get('favors', id);
+    if (favor) {
+      await db.put('favors', { ...favor, ...updates });
+    }
+  }
+
+  async deleteFavor(id: string) {
+    const db = await this.init();
+    await db.delete('favors', id);
+  }
+
   // Clear all data (for testing)
   async clearAll() {
     const db = await this.init();
@@ -212,6 +372,10 @@ class Database {
     await db.clear('chores');
     await db.clear('bills');
     await db.clear('anniversaries');
+    await db.clear('fridgeItems');
+    await db.clear('foodPreferences');
+    await db.clear('funds');
+    await db.clear('favors');
   }
 }
 

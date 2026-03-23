@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: couple-home-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - GIN_MODE=release
+      - SERVER_PORT=8080
+      - DB_DRIVER=sqlite
+      - DB_DSN=/app/data/couple_home.db
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - couple-home-network
+
+  # Optional: PostgreSQL (uncomment to use instead of SQLite)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: couple-home-db
+  #   environment:
+  #     POSTGRES_USER: couple_home
+  #     POSTGRES_PASSWORD: your_secure_password
+  #     POSTGRES_DB: couple_home
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   restart: unless-stopped
+  #   networks:
+  #     - couple-home-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U couple_home"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+networks:
+  couple-home-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:

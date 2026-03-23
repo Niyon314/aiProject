@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 
 interface TabBarProps {
-  activeTab: 'home' | 'schedule' | 'add' | 'message' | 'profile';
+  activeTab: 'home' | 'fridge' | 'add' | 'eating' | 'profile';
 }
 
 export default function TabBar({ activeTab }: TabBarProps) {
   const tabs = [
     { id: 'home', icon: '🏠', label: '首页', path: '/' },
-    { id: 'schedule', icon: '📅', label: '日程', path: '/schedule' },
+    { id: 'fridge', icon: '🧊', label: '冰箱', path: '/fridge' },
     { id: 'add', icon: '➕', label: '发布', path: '/add', isAction: true },
-    { id: 'message', icon: '💬', label: '消息', path: '/message' },
+    { id: 'eating', icon: '🍽️', label: '吃什么', path: '/eating/random' },
     { id: 'profile', icon: '👤', label: '我的', path: '/profile' },
   ] as const;
 

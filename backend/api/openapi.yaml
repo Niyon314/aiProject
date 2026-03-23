@@ -1,0 +1,624 @@
+openapi: 3.0.3
+info:
+  title: Couple Home API
+  description: |
+    情侣小家后端 API - 提供冰箱管理、菜谱推荐、账单管理和共同基金功能
+    
+    ## 功能模块
+    - **冰箱管理**: 食材库存管理、临期提醒
+    - **菜谱推荐**: 基于库存的智能推荐、菜谱投票
+    - **账单管理**: 日常账单记录、统计贡献比例
+    - **共同基金**: 家庭目标基金管理
+  version: 1.0.0
+  contact:
+    name: Couple Home Team
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.couplehome.app
+    description: Production server
+
+tags:
+  - name: Fridge
+    description: 冰箱食材管理
+  - name: Recipes
+    description: 菜谱推荐与管理
+  - name: Bills
+    description: 账单管理
+  - name: Fund
+    description: 共同基金管理
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      tags:
+        - System
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /api/fridge:
+    get:
+      summary: 获取冰箱库存列表
+      tags:
+        - Fridge
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FridgeListResponse'
+    post:
+      summary: 添加食材
+      tags:
+        - Fridge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FridgeItemInput'
+      responses:
+        '201':
+          description: Item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FridgeItemResponse'
+        '400':
+          description: Invalid input
+
+  /api/fridge/expiring:
+    get:
+      summary: 获取临期食材
+      tags:
+        - Fridge
+      parameters:
+        - name: days
+          in: query
+          description: Days threshold (default: 7)
+          schema:
+            type: integer
+            default: 7
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FridgeListResponse'
+
+  /api/fridge/{id}:
+    get:
+      summary: 获取单个食材
+      tags:
+        - Fridge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FridgeItemResponse'
+        '404':
+          description: Item not found
+    put:
+      summary: 更新食材
+      tags:
+        - Fridge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FridgeItemInput'
+      responses:
+        '200':
+          description: Item updated successfully
+        '404':
+          description: Item not found
+    delete:
+      summary: 删除食材
+      tags:
+        - Fridge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Item deleted successfully
+        '404':
+          description: Item not found
+
+  /api/recipes:
+    get:
+      summary: 获取菜谱列表
+      tags:
+        - Recipes
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeListResponse'
+
+  /api/recipes/random:
+    get:
+      summary: 随机推荐菜谱
+      tags:
+        - Recipes
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeListResponse'
+
+  /api/recipes/{id}:
+    get:
+      summary: 获取菜谱详情
+      tags:
+        - Recipes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeResponse'
+
+  /api/recipes/{id}/vote:
+    post:
+      summary: 菜谱投票
+      tags:
+        - Recipes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - voter
+                - rating
+              properties:
+                voter:
+                  type: string
+                  example: user
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  example: 5
+      responses:
+        '200':
+          description: Vote recorded successfully
+
+  /api/recipes/recommend:
+    post:
+      summary: 智能推荐菜谱
+      tags:
+        - Recipes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fridgeItems:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FridgeItem'
+                preferences:
+                  $ref: '#/components/schemas/UserPreferences'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeListResponse'
+
+  /api/bills:
+    get:
+      summary: 获取账单列表
+      tags:
+        - Bills
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillListResponse'
+    post:
+      summary: 创建账单
+      tags:
+        - Bills
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillInput'
+      responses:
+        '201':
+          description: Bill created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillResponse'
+
+  /api/bills/stats:
+    get:
+      summary: 获取统计数据
+      tags:
+        - Bills
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      user_total:
+                        type: number
+                      partner_total:
+                        type: number
+                      user_percentage:
+                        type: number
+                      partner_percentage:
+                        type: number
+                      shared_total:
+                        type: number
+
+  /api/bills/fund:
+    get:
+      summary: 获取共同基金列表
+      tags:
+        - Fund
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundListResponse'
+    post:
+      summary: 创建基金
+      tags:
+        - Fund
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FundInput'
+      responses:
+        '201':
+          description: Fund created successfully
+
+  /api/bills/fund/contribute:
+    post:
+      summary: 存入基金
+      tags:
+        - Fund
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fundId
+                - amount
+                - contributor
+              properties:
+                fundId:
+                  type: string
+                amount:
+                  type: number
+                  minimum: 0.01
+                contributor:
+                  type: string
+                  example: user
+                note:
+                  type: string
+      responses:
+        '200':
+          description: Contribution recorded successfully
+
+components:
+  schemas:
+    FridgeItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        icon:
+          type: string
+        quantity:
+          type: integer
+        unit:
+          type: string
+        expiryDate:
+          type: string
+          format: date-time
+        addedAt:
+          type: string
+          format: date-time
+        category:
+          type: string
+          enum: [vegetable, meat, seafood, egg, staple, condiment]
+        expiryStatus:
+          type: string
+          enum: [fresh, soon, urgent, expired, unknown]
+
+    FridgeItemInput:
+      type: object
+      required:
+        - name
+        - quantity
+      properties:
+        name:
+          type: string
+        icon:
+          type: string
+        quantity:
+          type: integer
+        unit:
+          type: string
+        expiryDate:
+          type: string
+          format: date-time
+        category:
+          type: string
+
+    FridgeItemResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/FridgeItem'
+        message:
+          type: string
+
+    FridgeListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FridgeItem'
+
+    Recipe:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        icon:
+          type: string
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeIngredient'
+        cookTime:
+          type: integer
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        cost:
+          type: number
+        tags:
+          type: array
+          items:
+            type: string
+        avgRating:
+          type: number
+        rateCount:
+          type: integer
+
+    RecipeIngredient:
+      type: object
+      properties:
+        name:
+          type: string
+        quantity:
+          type: integer
+        unit:
+          type: string
+        icon:
+          type: string
+        category:
+          type: string
+
+    RecipeResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Recipe'
+
+    RecipeListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipe'
+
+    UserPreferences:
+      type: object
+      properties:
+        favoriteTags:
+          type: array
+          items:
+            type: string
+        dislikedTags:
+          type: array
+          items:
+            type: string
+        maxCookTime:
+          type: integer
+        maxDifficulty:
+          type: string
+        budgetPerMeal:
+          type: number
+
+    Bill:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        amount:
+          type: number
+        payer:
+          type: string
+          enum: [user, partner]
+        date:
+          type: string
+          format: date
+        category:
+          type: string
+        photo:
+          type: string
+        note:
+          type: string
+        isShared:
+          type: boolean
+        fundContributionId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    BillInput:
+      type: object
+      required:
+        - title
+        - amount
+        - payer
+      properties:
+        title:
+          type: string
+        amount:
+          type: number
+        payer:
+          type: string
+        date:
+          type: string
+          format: date
+        category:
+          type: string
+        photo:
+          type: string
+        note:
+          type: string
+        isShared:
+          type: boolean
+
+    BillResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Bill'
+        message:
+          type: string
+
+    BillListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bill'
+
+    CommonFund:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        monthlyGoal:
+          type: number
+        progress:
+          type: number
+        remaining:
+          type: number
+
+    FundInput:
+      type: object
+      required:
+        - name
+        - targetAmount
+      properties:
+        name:
+          type: string
+        targetAmount:
+          type: number
+        monthlyGoal:
+          type: number
+
+    FundListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonFund'
