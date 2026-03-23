@@ -31,7 +31,7 @@ export const fridgeApi = {
     return handleResponse(response);
   },
   
-  update: async (id: string, updates: Partial<typeof item>) => {
+  update: async (id: string, updates: Partial<any>) => {
     const response = await fetch(`${API_BASE}/fridge/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
