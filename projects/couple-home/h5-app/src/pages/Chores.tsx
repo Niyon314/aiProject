@@ -1,158 +1,192 @@
 import { useEffect, useState } from 'react';
+import { useChoreStore } from '../store/choreStore';
 import { useAppStore } from '../store/appStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
-import type { Chore } from '../utils/db';
+import ChoreList from '../components/ChoreList';
+import StatsCard from '../components/StatsCard';
+import type { Chore } from '../api/choreApi';
 
 export default function Chores() {
-  const { chores, loadChores, completeChore, addChore, settings } = useAppStore();
+  const {
+    chores,
+    userStats,
+    partnerStats,
+    weekProgress,
+    loadChores,
+    loadStats,
+    claimChore,
+    completeChore,
+  } = useChoreStore();
+  const { settings } = useAppStore();
+  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'completed'>(
+    'pending'
+  );
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
     loadChores();
+    loadStats();
   }, []);
 
-  const pendingChores = chores.filter(c => c.status === 'pending');
-  const completedChores = chores.filter(c => c.status === 'completed');
+  const handleClaim = async (id: string) => {
+    try {
+      await claimChore(id);
+    } catch (error) {
+      console.error('Failed to claim chore:', error);
+      alert('认领失败，请重试');
+    }
+  };
 
-  const totalPoints = completedChores.reduce((sum, c) => sum + c.points, 0);
-
-  const handleComplete = async (id: string) => {
-    await completeChore(id);
+  const handleComplete = async (
+    id: string,
+    proofPhoto?: string,
+    notes?: string
+  ) => {
+    try {
+      await completeChore(id, proofPhoto, notes);
+      alert('🎉 打卡成功！积分已到账~');
+    } catch (error) {
+      console.error('Failed to complete chore:', error);
+      alert('打卡失败，请重试');
+    }
   };
 
   const handleAddChore = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-    
-    const newChore: Chore = {
-      id: Date.now().toString(),
+
+    const newChore: Partial<Chore> = {
       name: formData.get('name') as string,
       icon: formData.get('icon') as string || '🧹',
-      assignee: formData.get('assignee') as 'user' | 'partner',
-      dueDate: formData.get('dueDate') as string,
+      type: formData.get('type') as 'daily' | 'weekly' | 'monthly' | 'once',
       points: parseInt(formData.get('points') as string) || 10,
-      status: 'pending',
+      dueDate: formData.get('dueDate') as string,
     };
 
-    await addChore(newChore);
-    setShowAddForm(false);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || 'http://localhost:8080/api'}/chores`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newChore),
+        }
+      );
+      if (response.ok) {
+        await loadChores();
+        setShowAddForm(false);
+        alert('✅ 任务创建成功！');
+      }
+    } catch (error) {
+      console.error('Failed to create chore:', error);
+      alert('创建失败，请重试');
+    }
   };
 
+  const pendingCount = chores.filter((c) => c.status === 'pending').length;
+  const completedCount = chores.filter((c) => c.status === 'completed').length;
+
   return (
-    <div className="min-h-screen pb-[80px] animate-fade-in">
-      <Header 
-        title="家务分工" 
+    <div className="min-h-screen pb-[80px] animate-fade-in bg-gradient-to-br from-pink-100 via-rose-50 to-orange-50">
+      <Header
+        title="家务分工"
         showNotification
         onBack={() => window.history.back()}
       />
-      
-      <div className="px-4 py-6 space-y-6">
-        {/* 进度 */}
-        <div className="bg-white/20 backdrop-blur-sm rounded-md p-4 text-white">
-          <div className="flex items-center justify-between mb-2">
-            <p className="font-heading font-semibold">本周进度</p>
-            <p className="text-sm">
-              {completedChores.length}/{chores.length}
-            </p>
-          </div>
-          <div className="h-3 bg-white/30 rounded-full overflow-hidden mb-2">
-            <div 
-              className="h-full bg-white transition-all duration-500"
-              style={{ width: `${chores.length > 0 ? (completedChores.length / chores.length) * 100 : 0}%` }}
-            />
-          </div>
-          <p className="text-sm text-white/80">
-            🎉 太棒了！已完成 {completedChores.length} 项家务
-          </p>
-          <p className="text-xs text-white/60 mt-1">
-            ⭐ 获得 {totalPoints} 积分
-          </p>
-        </div>
 
-        {/* 待完成 */}
-        <div>
-          <h2 className="text-white text-lg font-heading font-semibold mb-3">
-            待完成 ({pendingChores.length})
-          </h2>
-          
-          {pendingChores.length > 0 ? (
-            <div className="space-y-3">
-              {pendingChores.map(chore => (
-                <div 
-                  key={chore.id}
-                  className="bg-white rounded-md p-4 shadow-sm border border-primary-light"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl">{chore.icon}</span>
-                      <div>
-                        <p className="font-heading font-semibold text-gray-800">
-                          {chore.name}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          👤 {chore.assignee === 'user' ? settings?.nickname : settings?.partnerNickname}
-                          {' | '}
-                          📅 {new Date(chore.dueDate).toLocaleDateString('zh-CN')}
-                        </p>
-                      </div>
-                    </div>
-                    <span className="bg-macaron-yellow text-gray-700 text-xs px-2 py-1 rounded-full font-semibold">
-                      ⭐ {chore.points} 积分
-                    </span>
-                  </div>
-                  
-                  <button
-                    onClick={() => handleComplete(chore.id)}
-                    className="w-full btn btn-primary mt-2"
-                  >
-                    ✅ 完成打卡
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white/20 backdrop-blur-sm rounded-md p-6 text-center text-white">
-              <p className="text-4xl mb-2">🌸</p>
-              <p className="text-sm">太棒了！所有家务都已完成</p>
-            </div>
+      <div className="px-4 py-6 space-y-6">
+        {/* 统计卡片 */}
+        <div className="grid grid-cols-2 gap-3">
+          {userStats && (
+            <StatsCard
+              stats={userStats}
+              nickname={settings?.nickname || '我'}
+              isUser={true}
+            />
+          )}
+          {partnerStats && (
+            <StatsCard
+              stats={partnerStats}
+              nickname={settings?.partnerNickname || 'TA'}
+              isUser={false}
+            />
           )}
         </div>
 
-        {/* 已完成 */}
-        {completedChores.length > 0 && (
-          <div>
-            <h2 className="text-white text-lg font-heading font-semibold mb-3">
-              已完成 ({completedChores.length})
-            </h2>
-            <div className="space-y-2">
-              {completedChores.map(chore => (
-                <div 
-                  key={chore.id}
-                  className="bg-white/60 rounded-md p-3 border border-white/50"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">✅</span>
-                    <div className="flex-1">
-                      <p className="text-gray-600 line-through">{chore.name}</p>
-                      <p className="text-xs text-gray-400">
-                        👤 {chore.assignee === 'user' ? settings?.nickname : settings?.partnerNickname}
-                        {' | '}
-                        ⭐ {chore.points} 积分
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* 周进度 */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border-2 border-white/50">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-heading font-bold text-gray-800">
+              📊 本周进度
+            </h3>
+            <span className="text-sm font-semibold text-pink-600">
+              {weekProgress.completed}/{weekProgress.total}
+            </span>
           </div>
-        )}
+          <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-pink-400 to-rose-400 rounded-full transition-all duration-500"
+              style={{
+                width: `${
+                  weekProgress.total > 0
+                    ? (weekProgress.completed / weekProgress.total) * 100
+                    : 0
+                }%`,
+              }}
+            />
+          </div>
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            {weekProgress.total > 0 &&
+            weekProgress.completed === weekProgress.total ? (
+              <span className="text-pink-600 font-semibold">
+                🎉 太棒了！本周任务全部完成！
+              </span>
+            ) : (
+              `加油！还差 ${weekProgress.total - weekProgress.completed} 个任务就完成啦~`
+            )}
+          </p>
+        </div>
+
+        {/* 筛选标签 */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setActiveTab('pending')}
+            className={`flex-1 py-2 px-4 rounded-full font-semibold transition-all ${
+              activeTab === 'pending'
+                ? 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white shadow-md'
+                : 'bg-white/70 text-gray-600 hover:bg-white'
+            }`}
+          >
+            待完成 ({pendingCount})
+          </button>
+          <button
+            onClick={() => setActiveTab('completed')}
+            className={`flex-1 py-2 px-4 rounded-full font-semibold transition-all ${
+              activeTab === 'completed'
+                ? 'bg-gradient-to-r from-green-400 to-emerald-400 text-white shadow-md'
+                : 'bg-white/70 text-gray-600 hover:bg-white'
+            }`}
+          >
+            已完成 ({completedCount})
+          </button>
+        </div>
+
+        {/* 任务列表 */}
+        <ChoreList
+          chores={chores}
+          userNickname={settings?.nickname || '我'}
+          partnerNickname={settings?.partnerNickname || 'TA'}
+          onClaim={handleClaim}
+          onComplete={handleComplete}
+          filter={activeTab}
+        />
 
         {/* 添加按钮 */}
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="fixed bottom-[80px] right-4 w-14 h-14 bg-gradient-to-br from-primary-dark to-primary-darker rounded-full shadow-lg text-white text-3xl flex items-center justify-center hover:shadow-xl transition-all active:scale-95"
+          className="fixed bottom-[80px] right-4 w-14 h-14 bg-gradient-to-br from-pink-400 to-rose-400 rounded-full shadow-lg text-white text-3xl flex items-center justify-center hover:shadow-xl transition-all active:scale-95"
         >
           ➕
         </button>
@@ -160,23 +194,25 @@ export default function Chores() {
         {/* 添加表单 */}
         {showAddForm && (
           <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
-            <div className="bg-white rounded-t-lg w-full p-6 animate-slide-in">
-              <h3 className="text-lg font-heading font-semibold mb-4">添加家务</h3>
-              
+            <div className="bg-white rounded-t-3xl w-full p-6 animate-slide-up">
+              <h3 className="text-lg font-heading font-bold mb-4">
+                ➕ 添加家务任务
+              </h3>
+
               <form onSubmit={handleAddChore} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    家务名称
+                    任务名称
                   </label>
                   <input
                     type="text"
                     name="name"
                     required
-                    className="input"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
                     placeholder="例如：洗碗、拖地..."
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
                     图标
@@ -184,25 +220,27 @@ export default function Chores() {
                   <input
                     type="text"
                     name="icon"
-                    className="input"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
                     placeholder="🧹"
                     defaultValue="🧹"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    分配给
+                    任务类型
                   </label>
                   <select
-                    name="assignee"
-                    className="input"
+                    name="type"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
                   >
-                    <option value="user">{settings?.nickname}</option>
-                    <option value="partner">{settings?.partnerNickname}</option>
+                    <option value="daily">每日</option>
+                    <option value="weekly">每周</option>
+                    <option value="monthly">每月</option>
+                    <option value="once">临时</option>
                   </select>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
                     截止日期
@@ -211,11 +249,11 @@ export default function Chores() {
                     type="date"
                     name="dueDate"
                     required
-                    className="input"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
                     defaultValue={new Date().toISOString().split('T')[0]}
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
                     积分
@@ -223,23 +261,23 @@ export default function Chores() {
                   <input
                     type="number"
                     name="points"
-                    className="input"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
                     defaultValue="10"
                     min="1"
                   />
                 </div>
-                
+
                 <div className="flex gap-3 pt-4">
                   <button
                     type="button"
                     onClick={() => setShowAddForm(false)}
-                    className="flex-1 btn btn-ghost"
+                    className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-full transition-colors"
                   >
                     取消
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 btn btn-primary"
+                    className="flex-1 bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white font-bold py-3 px-4 rounded-full transition-all"
                   >
                     添加
                   </button>

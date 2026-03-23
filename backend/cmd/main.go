@@ -37,6 +37,12 @@ func main() {
 		&models.FundContribution{},
 		&models.UserPreferences{},
 		&models.RecipeVote{},
+		&models.MealVote{},
+		&models.MealOption{},
+		&models.UserVote{},
+		&models.Chore{},
+		&models.ChoreTemplate{},
+		&models.UserStats{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -46,18 +52,24 @@ func main() {
 	recipeRepo := repository.NewRecipeRepository(db)
 	billRepo := repository.NewBillRepository(db)
 	fundRepo := repository.NewFundRepository(db)
+	mealRepo := repository.NewMealRepository(db)
+	choreRepo := repository.NewChoreRepository(db)
 
 	// Initialize services
 	fridgeService := service.NewFridgeService(fridgeRepo)
 	recipeService := service.NewRecipeService(recipeRepo)
 	billService := service.NewBillService(billRepo, fundRepo)
 	fundService := service.NewFundService(fundRepo)
+	mealService := service.NewMealService(mealRepo, recipeRepo)
+	choreService := service.NewChoreService(choreRepo)
 
 	// Initialize handlers
 	fridgeHandler := handlers.NewFridgeHandler(fridgeService)
 	recipeHandler := handlers.NewRecipeHandler(recipeService)
 	billHandler := handlers.NewBillHandler(billService)
 	fundHandler := handlers.NewFundHandler(fundService)
+	mealHandler := handlers.NewMealHandler(mealService)
+	choreHandler := handlers.NewChoreHandler(choreService)
 
 	// Initialize router
 	router := gin.Default()
@@ -101,6 +113,35 @@ func main() {
 			recipes.GET("/:id", recipeHandler.GetRecipe)
 			recipes.POST("/recommend", recipeHandler.RecommendRecipes)
 			recipes.POST("/:id/vote", recipeHandler.VoteRecipe)
+		}
+
+		// Meal vote routes
+		meals := api.Group("/meals")
+		{
+			meals.GET("/today", mealHandler.GetTodayVote)
+			meals.POST("/today", mealHandler.CreateTodayVote)
+			meals.POST("/:id/vote", mealHandler.SubmitVote)
+			meals.GET("/:id/votes", mealHandler.GetVoteResult)
+			meals.GET("/history", mealHandler.GetHistoricalVotes)
+		}
+
+		// Chore routes
+		chores := api.Group("/chores")
+		{
+			chores.GET("", choreHandler.GetChores)
+			chores.POST("", choreHandler.CreateChore)
+			chores.POST("/:id/claim", choreHandler.ClaimChore)
+			chores.POST("/:id/complete", choreHandler.CompleteChore)
+			chores.GET("/stats", choreHandler.GetStats)
+			chores.GET("/leaderboard", choreHandler.GetLeaderboard)
+			
+			// Chore templates
+			templates := chores.Group("/templates")
+			{
+				templates.GET("", choreHandler.GetChoreTemplates)
+				templates.POST("", choreHandler.CreateChoreTemplate)
+				templates.DELETE("/:id", choreHandler.DeleteChoreTemplate)
+			}
 		}
 
 		// Bill routes
