@@ -3,6 +3,8 @@ interface HeaderProps {
   showNotification?: boolean;
   notificationCount?: number;
   onBack?: () => void;
+  actionIcon?: string;
+  onAction?: () => void;
 }
 
 export default function Header({ 
@@ -10,6 +12,8 @@ export default function Header({
   showNotification = false, 
   notificationCount = 0,
   onBack,
+  actionIcon,
+  onAction,
 }: HeaderProps) {
   return (
     <header className="sticky top-0 z-40 bg-gradient-to-br from-primary-light/95 to-primary/95 backdrop-blur-sm">
@@ -28,16 +32,27 @@ export default function Header({
           </h1>
         </div>
         
-        {showNotification && (
-          <button className="relative text-white text-2xl touch-target">
-            🔔
-            {notificationCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-bounce-slow">
-                {notificationCount > 9 ? '9+' : notificationCount}
-              </span>
-            )}
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {actionIcon && onAction && (
+            <button 
+              onClick={onAction}
+              className="text-white text-2xl touch-target hover:opacity-80 transition-opacity"
+            >
+              {actionIcon}
+            </button>
+          )}
+          
+          {showNotification && (
+            <button className="relative text-white text-2xl touch-target">
+              🔔
+              {notificationCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-bounce-slow">
+                  {notificationCount > 9 ? '9+' : notificationCount}
+                </span>
+              )}
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );

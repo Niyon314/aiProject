@@ -1,0 +1,324 @@
+/* 主题 CSS 变量定义 */
+
+/* ==================== 少女粉 (默认主题) ==================== */
+.theme-pink {
+  --primary-light: #FFB5C5;
+  --primary: #FF6B81;
+  --primary-dark: #FF526B;
+  --primary-darker: #E8415A;
+  --accent: #FF8FA3;
+  --background-gradient: linear-gradient(135deg, #FFE5EC 0%, #FFB5C5 100%);
+  --card-bg: #FFFFFF;
+  --text-primary: #2D3436;
+  --text-secondary: #636E72;
+  --text-light: #B2BEC3;
+  --border-color: #FFD6DE;
+  --shadow-color: rgba(255, 107, 129, 0.15);
+  --success: #00B894;
+  --warning: #FDCB6E;
+  --error: #FF7675;
+  --info: #74B9FF;
+}
+
+/* ==================== 深夜黑 ==================== */
+.theme-dark {
+  --primary-light: #4A5568;
+  --primary: #718096;
+  --primary-dark: #A0AEC0;
+  --primary-darker: #CBD5E0;
+  --accent: #E2E8F0;
+  --background-gradient: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  --card-bg: #2D3748;
+  --text-primary: #F7FAFC;
+  --text-secondary: #CBD5E0;
+  --text-light: #A0AEC0;
+  --border-color: #4A5568;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --success: #48BB78;
+  --warning: #ECC94B;
+  --error: #F56565;
+  --info: #4299E1;
+}
+
+/* ==================== 海洋蓝 ==================== */
+.theme-blue {
+  --primary-light: #B3E5FC;
+  --primary: #4FC3F7;
+  --primary-dark: #29B6F6;
+  --primary-darker: #03A9F4;
+  --accent: #81D4FA;
+  --background-gradient: linear-gradient(135deg, #E1F5FE 0%, #B3E5FC 100%);
+  --card-bg: #FFFFFF;
+  --text-primary: #1A237E;
+  --text-secondary: #3949AB;
+  --text-light: #7986CB;
+  --border-color: #90CAF9;
+  --shadow-color: rgba(79, 195, 247, 0.2);
+  --success: #00B894;
+  --warning: #FDCB6E;
+  --error: #FF7675;
+  --info: #4FC3F7;
+}
+
+/* ==================== 清新绿 ==================== */
+.theme-green {
+  --primary-light: #C8E6C9;
+  --primary: #66BB6A;
+  --primary-dark: #4CAF50;
+  --primary-darker: #43A047;
+  --accent: #81C784;
+  --background-gradient: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  --card-bg: #FFFFFF;
+  --text-primary: #1B5E20;
+  --text-secondary: #2E7D32;
+  --text-light: #66BB6A;
+  --border-color: #A5D6A7;
+  --shadow-color: rgba(102, 187, 106, 0.2);
+  --success: #66BB6A;
+  --warning: #FFA726;
+  --error: #EF5350;
+  --info: #42A5F5;
+}
+
+/* ==================== 葡萄紫 ==================== */
+.theme-purple {
+  --primary-light: #E1BEE7;
+  --primary: #BA68C8;
+  --primary-dark: #AB47BC;
+  --primary-darker: #8E24AA;
+  --accent: #CE93D8;
+  --background-gradient: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+  --card-bg: #FFFFFF;
+  --text-primary: #4A148C;
+  --text-secondary: #6A1B9A;
+  --text-light: #9C27B0;
+  --border-color: #D1C4E9;
+  --shadow-color: rgba(186, 104, 200, 0.2);
+  --success: #66BB6A;
+  --warning: #FFA726;
+  --error: #EF5350;
+  --info: #BA68C8;
+}
+
+/* ==================== 活力橙 ==================== */
+.theme-orange {
+  --primary-light: #FFE0B2;
+  --primary: #FFA726;
+  --primary-dark: #FB8C00;
+  --primary-darker: #F57C00;
+  --accent: #FFB74D;
+  --background-gradient: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+  --card-bg: #FFFFFF;
+  --text-primary: #E65100;
+  --text-secondary: #EF6C00;
+  --text-light: #FF9800;
+  --border-color: #FFCC80;
+  --shadow-color: rgba(255, 167, 38, 0.2);
+  --success: #66BB6A;
+  --warning: #FFA726;
+  --error: #EF5350;
+  --info: #29B6F6;
+}
+
+/* ==================== 圆角大小变量 ==================== */
+.rounded-xs {
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
+}
+
+.rounded-sm {
+  --border-radius-sm: 6px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 14px;
+  --border-radius-xl: 20px;
+  --border-radius-full: 9999px;
+}
+
+.rounded-md {
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+  --border-radius-full: 9999px;
+}
+
+.rounded-lg {
+  --border-radius-sm: 10px;
+  --border-radius-md: 14px;
+  --border-radius-lg: 18px;
+  --border-radius-xl: 28px;
+  --border-radius-full: 9999px;
+}
+
+.rounded-xl {
+  --border-radius-sm: 12px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 20px;
+  --border-radius-xl: 32px;
+  --border-radius-full: 9999px;
+}
+
+/* ==================== 动画强度变量 ==================== */
+.animation-none {
+  --transition-duration: 0ms;
+  --animation-duration: 0ms;
+}
+
+.animation-low {
+  --transition-duration: 150ms;
+  --animation-duration: 200ms;
+}
+
+.animation-medium {
+  --transition-duration: 200ms;
+  --animation-duration: 300ms;
+}
+
+.animation-high {
+  --transition-duration: 300ms;
+  --animation-duration: 400ms;
+}
+
+.animation-extreme {
+  --transition-duration: 400ms;
+  --animation-duration: 600ms;
+}
+
+/* ==================== 主题应用类 ==================== */
+.theme-pink body,
+body.theme-pink {
+  background: var(--background-gradient);
+}
+
+.theme-dark body,
+body.theme-dark {
+  background: var(--background-gradient);
+}
+
+.theme-blue body,
+body.theme-blue {
+  background: var(--background-gradient);
+}
+
+.theme-green body,
+body.theme-green {
+  background: var(--background-gradient);
+}
+
+.theme-purple body,
+body.theme-purple {
+  background: var(--background-gradient);
+}
+
+.theme-orange body,
+body.theme-orange {
+  background: var(--background-gradient);
+}
+
+/* ==================== 通用组件主题适配 ==================== */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius-md, 12px);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: all var(--transition-duration, 200ms) ease-out;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+  color: white;
+  border-radius: var(--border-radius-full, 9999px);
+  transition: all var(--transition-duration, 200ms) ease-out;
+}
+
+.input {
+  border-radius: var(--border-radius-md, 12px);
+  border: 2px solid var(--border-color);
+  transition: all var(--transition-duration, 200ms) ease-out;
+}
+
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--shadow-color);
+}
+
+/* 文本颜色 */
+.text-primary {
+  color: var(--primary);
+}
+
+.text-primary-dark {
+  color: var(--primary-dark);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* 背景色 */
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-primary-light {
+  background-color: var(--primary-light);
+}
+
+/* 边框色 */
+.border-primary {
+  border-color: var(--primary);
+}
+
+.border-primary-light {
+  border-color: var(--primary-light);
+}
+
+/* 阴影 */
+.shadow-primary {
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* 动画类 */
+.animate-fade-in {
+  animation: fade-in var(--animation-duration, 300ms) ease-out;
+}
+
+.animate-slide-in {
+  animation: slide-in var(--animation-duration, 300ms) ease-out;
+}
+
+.animate-heart-beat {
+  animation: heart-beat var(--animation-duration, 300ms) ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heart-beat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}

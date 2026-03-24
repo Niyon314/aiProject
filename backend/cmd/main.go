@@ -45,6 +45,12 @@ func main() {
 		&models.UserStats{},
 		&models.Schedule{},
 		&models.Anniversary{},
+		&models.ThemeConfig{},
+		&models.WishlistItem{},
+		&models.WishlistContribution{},
+		&models.Movie{},
+		&models.Diary{},
+		&models.Reminder{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -58,6 +64,7 @@ func main() {
 	choreRepo := repository.NewChoreRepository(db)
 	scheduleRepo := repository.NewScheduleRepository(db)
 	anniversaryRepo := repository.NewAnniversaryRepository(db)
+	settingsRepo := repository.NewSettingsRepository(db)
 
 	// Initialize services
 	fridgeService := service.NewFridgeService(fridgeRepo)
@@ -68,6 +75,7 @@ func main() {
 	choreService := service.NewChoreService(choreRepo)
 	scheduleService := service.NewScheduleService(scheduleRepo)
 	anniversaryService := service.NewAnniversaryService(anniversaryRepo)
+	themeService := service.NewThemeService(settingsRepo)
 
 	// Initialize handlers
 	fridgeHandler := handlers.NewFridgeHandler(fridgeService)
@@ -78,6 +86,8 @@ func main() {
 	choreHandler := handlers.NewChoreHandler(choreService)
 	scheduleHandler := handlers.NewScheduleHandler(scheduleService)
 	anniversaryHandler := handlers.NewAnniversaryHandler(anniversaryService)
+	statisticsHandler := handlers.NewStatisticsHandler(db)
+	themeHandler := handlers.NewThemeHandler(themeService)
 
 	// Initialize router
 	router := gin.Default()
@@ -198,6 +208,69 @@ func main() {
 			anniversaries.PUT("/:id", anniversaryHandler.UpdateAnniversary)
 			anniversaries.DELETE("/:id", anniversaryHandler.DeleteAnniversary)
 			anniversaries.GET("/:id/progress", anniversaryHandler.GetAnniversaryProgress)
+		}
+
+		// Wishlist routes
+		wishlistHandler := handlers.NewWishlistHandler(db)
+		wishlist := api.Group("/wishlist")
+		{
+			wishlist.GET("", wishlistHandler.GetWishlist)
+			wishlist.GET("/stats", wishlistHandler.GetWishlistStats)
+			wishlist.POST("", wishlistHandler.CreateWishlistItem)
+			wishlist.POST("/:id/contribute", wishlistHandler.ContributeToWishlist)
+			wishlist.PUT("/:id/complete", wishlistHandler.CompleteWishlistItem)
+			wishlist.DELETE("/:id", wishlistHandler.DeleteWishlistItem)
+		}
+
+		// Movie routes
+		movieHandler := handlers.NewMovieHandler(db)
+		movies := api.Group("/movies")
+		{
+			movies.GET("", movieHandler.GetMovies)
+			movies.GET("/stats", movieHandler.GetMovieStats)
+			movies.POST("", movieHandler.CreateMovie)
+			movies.PUT("/:id/watched", movieHandler.MarkWatched)
+			movies.PUT("/:id/rate", movieHandler.RateMovie)
+			movies.DELETE("/:id", movieHandler.DeleteMovie)
+		}
+
+		// Diary routes
+		diaryHandler := handlers.NewDiaryHandler(db)
+		diaries := api.Group("/diaries")
+		{
+			diaries.GET("", diaryHandler.GetDiaries)
+			diaries.GET("/month/:month", diaryHandler.GetDiariesByMonth)
+			diaries.GET("/:id", diaryHandler.GetDiaryByID)
+			diaries.POST("", diaryHandler.CreateDiary)
+			diaries.PUT("/:id", diaryHandler.UpdateDiary)
+			diaries.DELETE("/:id", diaryHandler.DeleteDiary)
+			diaries.POST("/:id/photos", diaryHandler.UploadPhotos)
+			diaries.PUT("/:id/privacy", diaryHandler.UpdatePrivacy)
+		}
+
+		// Reminder routes
+		handlers.RegisterReminderRoutes(api, db)
+
+		// Statistics routes
+		statistics := api.Group("/statistics")
+		{
+			statistics.GET("/overview", statisticsHandler.GetOverview)
+			statistics.GET("/spending", statisticsHandler.GetSpendingTrend)
+			statistics.GET("/categories", statisticsHandler.GetCategories)
+			statistics.GET("/chores", statisticsHandler.GetChoresContribution)
+		}
+
+		// Settings routes
+		settings := api.Group("/settings")
+		{
+			// Theme routes
+			themes := settings.Group("/theme")
+			{
+				themes.GET("", themeHandler.GetThemeConfig)
+				themes.PUT("", themeHandler.UpdateThemeConfig)
+				themes.POST("/reset", themeHandler.ResetThemeConfig)
+			}
+			settings.GET("/themes", themeHandler.GetAvailableThemes)
 		}
 	}
 

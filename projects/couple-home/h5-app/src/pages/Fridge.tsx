@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/appStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
@@ -25,6 +26,7 @@ const categoryLabels: Record<Category, string> = {
 };
 
 export default function Fridge() {
+  const navigate = useNavigate();
   const { 
     fridgeItems, 
     loadFridgeItems, 
@@ -135,9 +137,29 @@ export default function Fridge() {
         title="🧊 冰箱管理" 
         showNotification
         onBack={() => window.history.back()}
+        actionIcon="🤖"
+        onAction={() => navigate('/fridge/ai-recipes')}
       />
       
       <div className="px-4 py-6 space-y-6">
+        {/* AI 菜谱推荐入口 */}
+        {fridgeItems.length > 0 && (
+          <button
+            onClick={() => navigate('/fridge/ai-recipes')}
+            className="w-full bg-gradient-to-r from-primary to-primary-dark text-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all active:scale-95"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">🤖</span>
+                <div className="text-left">
+                  <p className="font-heading font-semibold text-lg">AI 菜谱推荐</p>
+                  <p className="text-sm opacity-90">根据冰箱食材智能推荐美味菜谱</p>
+                </div>
+              </div>
+              <span className="text-2xl">→</span>
+            </div>
+          </button>
+        )}
         {/* 分类筛选 */}
         <div className="flex gap-2 overflow-x-auto pb-2">
           {categories.map(cat => (

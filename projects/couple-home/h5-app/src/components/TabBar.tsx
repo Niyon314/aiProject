@@ -1,17 +1,18 @@
 import { Link } from 'react-router-dom';
 
 interface TabBarProps {
-  activeTab: 'home' | 'fridge' | 'add' | 'eating' | 'profile';
+  activeTab: string;
 }
 
 export default function TabBar({ activeTab }: TabBarProps) {
   const tabs = [
     { id: 'home', icon: '🏠', label: '首页', path: '/' },
-    { id: 'fridge', icon: '🧊', label: '冰箱', path: '/fridge' },
+    { id: 'schedule', icon: '📅', label: '日程', path: '/calendar' },
     { id: 'add', icon: '➕', label: '发布', path: '/add', isAction: true },
-    { id: 'eating', icon: '🍽️', label: '吃什么', path: '/eating/random' },
+    { id: 'movies', icon: '🎬', label: '观影', path: '/movies' },
+    { id: 'wishlist', icon: '🎯', label: '愿望', path: '/wishlist' },
     { id: 'profile', icon: '👤', label: '我的', path: '/profile' },
-  ] as const;
+  ];
 
   return (
     <nav className="tab-bar safe-area-bottom">

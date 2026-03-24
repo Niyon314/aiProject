@@ -88,7 +88,10 @@ export default function Profile() {
         {/* 功能菜单 */}
         <div className="bg-white rounded-md shadow-md overflow-hidden">
           <div className="divide-y divide-gray-100">
-            <button className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
+            <button 
+              onClick={() => window.location.href = '/profile/theme'}
+              className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+            >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">🎨</span>
                 <span className="text-gray-700">主题装扮</span>
