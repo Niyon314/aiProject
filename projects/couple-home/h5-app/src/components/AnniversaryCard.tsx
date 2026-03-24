@@ -142,7 +142,7 @@ export default function AnniversaryCard({
       )}
 
       {/* 提醒设置 */}
-      {anniversary.reminderDays.length > 0 && (
+      {anniversary.reminderDays && anniversary.reminderDays.length > 0 && (
         <div className="flex items-center gap-2 mb-4">
           <span className="text-sm">⏰</span>
           <span className="text-sm text-gray-600">

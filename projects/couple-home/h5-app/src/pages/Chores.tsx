@@ -67,7 +67,7 @@ export default function Chores() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8080/api'}/chores`,
+        `/api/chores`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

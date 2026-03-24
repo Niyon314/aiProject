@@ -64,7 +64,7 @@ export default function Home() {
         </div>
 
         {/* 纪念日卡片 */}
-        {anniversaries.length > 0 && (
+        {anniversaries && anniversaries.length > 0 && (
           <AnniversaryCard 
             anniversary={anniversaries[0] as unknown as Anniversary}
             daysTogether={calculateDaysTogether(anniversaries[0].date)}

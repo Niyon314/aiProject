@@ -145,7 +145,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Bills actions - 使用后端 API
   loadBills: async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/bills');
+      const response = await fetch('/api/bills');
       if (response.ok) {
         const data = await response.json();
         set({ bills: data.data || [] });
@@ -160,7 +160,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   
   addBill: async (bill) => {
     try {
-      const response = await fetch('http://localhost:8080/api/bills', {
+      const response = await fetch('/api/bills', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -183,7 +183,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   
   confirmBill: async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/bills/${id}`, {
+      const response = await fetch(`/api/bills/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'confirmed' }),
@@ -222,7 +222,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   loadFridgeItems: async () => {
     try {
       // 先尝试从后端 API 获取
-      const response = await fetch('http://localhost:8080/api/fridge');
+      const response = await fetch('/api/fridge');
       if (response.ok) {
         const data = await response.json();
         set({ fridgeItems: data.data || [] });
@@ -238,7 +238,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   
   addFridgeItem: async (item) => {
     try {
-      const response = await fetch('http://localhost:8080/api/fridge', {
+      const response = await fetch('/api/fridge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -262,7 +262,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   
   updateFridgeItem: async (id, updates) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/fridge/${id}`, {
+      const response = await fetch(`/api/fridge/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
@@ -280,7 +280,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   
   deleteFridgeItem: async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/fridge/${id}`, {
+      const response = await fetch(`/api/fridge/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
