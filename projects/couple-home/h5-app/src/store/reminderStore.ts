@@ -19,7 +19,7 @@ interface ReminderState {
   getDateIdeas: (type?: string, budget?: string) => Promise<any>;
 }
 
-export const useReminderStore = create<ReminderState>((set, get) => ({
+export const useReminderStore = create<ReminderState>((set, _get) => ({
   reminders: [],
   upcomingReminders: [],
   loading: false,

@@ -143,18 +143,7 @@ export default function CalendarView({ events, viewMode, onDateSelect }: Calenda
     }
   };
 
-  const getConfirmationBadge = (event: CalendarEvent) => {
-    switch (event.confirmedBy) {
-      case 'both':
-        return '✅';
-      case 'user':
-        return '👤';
-      case 'partner':
-        return '👥';
-      default:
-        return '⏳';
-    }
-  };
+  // getConfirmationBadge reserved for future use
 
   const calendarDays = viewMode === 'month' ? generateCalendarDays() : generateWeekDays();
   const weekStart = viewMode === 'week' ? monthNames[month] + ' ' + year : monthNames[month] + ' ' + year;

@@ -5,7 +5,7 @@ import TabBar from '../components/TabBar';
 import { pointsApi, type PointsRecord, type ShopItem, type RedeemedCoupon } from '../api/pointsApi';
 
 export default function Points() {
-  const { settings } = useAppStore();
+  const { settings: _settings } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState({
     totalPoints: 0,

@@ -108,7 +108,7 @@ export default function AIRecipes() {
   };
 
   // 查看菜谱详情
-  const viewRecipeDetail = (recipeId: string) => {
+  const viewRecipeDetail = (_recipeId: string) => {
     // TODO: 实现菜谱详情页
     alert('菜谱详情功能开发中...');
   };

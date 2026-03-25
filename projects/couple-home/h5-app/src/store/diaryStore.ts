@@ -15,7 +15,7 @@ interface DiaryState {
   updatePrivacy: (id: string, privacy: 'private' | 'shared') => Promise<Diary>;
 }
 
-export const useDiaryStore = create<DiaryState>((set, get) => ({
+export const useDiaryStore = create<DiaryState>((set, _get) => ({
   diaries: [],
   loading: false,
   error: null,

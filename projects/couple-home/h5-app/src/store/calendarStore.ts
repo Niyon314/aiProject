@@ -18,7 +18,7 @@ interface CalendarState {
   markEventCancelled: (id: string) => Promise<CalendarEvent>;
 }
 
-export const useCalendarStore = create<CalendarState>((set, get) => ({
+export const useCalendarStore = create<CalendarState>((set, _get) => ({
   events: [],
   upcomingEvents: [],
   loading: false,

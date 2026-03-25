@@ -17,18 +17,7 @@ export default function EventList({
   getConfirmationStatus,
   emptyMessage,
 }: EventListProps) {
-  const getStatusStyle = () => {
-    switch (events[0]?.status) {
-      case 'planned':
-        return 'bg-gradient-to-br from-pink-50 to-rose-50 border-pink-300';
-      case 'completed':
-        return 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-300';
-      case 'cancelled':
-        return 'bg-gradient-to-br from-gray-50 to-slate-50 border-gray-300';
-      default:
-        return 'bg-white border-gray-200';
-    }
-  };
+  // getStatusStyle reserved for future use
 
   const getTypeText = (type: string) => {
     switch (type) {

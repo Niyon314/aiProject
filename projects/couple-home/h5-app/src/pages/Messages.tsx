@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { messageApi, type Message } from '../api/messageApi';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
 
 export default function Messages() {
-  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
