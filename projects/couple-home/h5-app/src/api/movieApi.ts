@@ -1,5 +1,5 @@
 // 观影清单 API 客户端
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 // 通用请求处理
 async function handleResponse<T>(response: Response): Promise<T> {

@@ -1,5 +1,5 @@
 // 想吃清单 API
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
