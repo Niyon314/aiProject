@@ -139,6 +139,8 @@ func main() {
 			recipes.GET("/random", recipeHandler.GetRandomRecipes)
 			recipes.GET("/:id", recipeHandler.GetRecipe)
 			recipes.POST("/recommend", recipeHandler.RecommendRecipes)
+			recipes.POST("/ai-recommend", recipeHandler.RecommendRecipes) // 前端兼容
+			recipes.POST("/shopping-list", recipeHandler.GetShoppingList) // 购物清单
 			recipes.POST("/:id/vote", recipeHandler.VoteRecipe)
 		}
 
@@ -218,6 +220,19 @@ func main() {
 			schedules.PUT("/:id", scheduleHandler.UpdateSchedule)
 			schedules.DELETE("/:id", scheduleHandler.DeleteSchedule)
 			schedules.PATCH("/:id/status", scheduleHandler.UpdateScheduleStatus)
+		}
+
+		// Calendar routes (前端兼容别名 → 映射到 schedule handler)
+		calendarEvents := api.Group("/calendar/events")
+		{
+			calendarEvents.GET("", scheduleHandler.GetSchedules)
+			calendarEvents.POST("", scheduleHandler.CreateSchedule)
+			calendarEvents.GET("/upcoming", scheduleHandler.GetUpcoming)
+			calendarEvents.GET("/by-date/:date", scheduleHandler.GetSchedules)
+			calendarEvents.GET("/:id", scheduleHandler.GetScheduleByID)
+			calendarEvents.PUT("/:id", scheduleHandler.UpdateSchedule)
+			calendarEvents.DELETE("/:id", scheduleHandler.DeleteSchedule)
+			calendarEvents.POST("/:id/confirm", scheduleHandler.UpdateScheduleStatus)
 		}
 
 		// Anniversary routes

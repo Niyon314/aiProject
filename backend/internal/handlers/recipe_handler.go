@@ -105,3 +105,44 @@ func (h *RecipeHandler) RecommendRecipes(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": recipes})
 }
+
+// GetShoppingList - 根据菜谱生成购物清单
+// POST /api/recipes/shopping-list
+func (h *RecipeHandler) GetShoppingList(c *gin.Context) {
+	var req struct {
+		RecipeIDs []string `json:"recipeIds" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	ingredients := make(map[string]map[string]interface{})
+	for _, id := range req.RecipeIDs {
+		recipe, err := h.service.GetRecipe(c.Request.Context(), id)
+		if err != nil {
+			continue
+		}
+		for _, ing := range recipe.Ingredients {
+			key := ing.Name
+			if existing, ok := ingredients[key]; ok {
+				existing["quantity"] = existing["quantity"].(int) + ing.Quantity
+			} else {
+				ingredients[key] = map[string]interface{}{
+					"name":     ing.Name,
+					"quantity": ing.Quantity,
+					"unit":     ing.Unit,
+					"icon":     ing.Icon,
+					"category": ing.Category,
+				}
+			}
+		}
+	}
+
+	list := make([]map[string]interface{}, 0, len(ingredients))
+	for _, v := range ingredients {
+		list = append(list, v)
+	}
+
+	c.JSON(200, gin.H{"data": list})
+}
