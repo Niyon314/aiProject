@@ -12,13 +12,15 @@ import ThemeSettings from './pages/ThemeSettings';
 import Fridge from './pages/Fridge';
 import AIRecipes from './pages/AIRecipes';
 import RandomRecommend from './pages/RandomRecommend';
-import MealVote from './pages/MealVote';
-import MealResult from './pages/MealResult';
+import MealHome from './pages/MealHome';
+import MealWishlist from './pages/MealWishlist';
 import Points from './pages/Points';
 import Messages from './pages/Messages';
 import Statistics from './pages/Statistics';
 import Wishlist from './pages/Wishlist';
 import MovieList from './pages/MovieList';
+import Diary from './pages/Diary';
+import SurpriseReminders from './pages/SurpriseReminders';
 
 function App() {
   return (
@@ -36,14 +38,18 @@ function App() {
         <Route path="/profile/theme" element={<ThemeSettings />} />
         <Route path="/fridge" element={<Fridge />} />
         <Route path="/fridge/ai-recipes" element={<AIRecipes />} />
+        {/* 吃饭模块（新） */}
+        <Route path="/meal" element={<MealHome />} />
+        <Route path="/meal/wishlist" element={<MealWishlist />} />
         <Route path="/eating/random" element={<RandomRecommend />} />
-        <Route path="/meal-vote" element={<MealVote />} />
-        <Route path="/meal-result/:id" element={<MealResult />} />
+        {/* 其他 */}
         <Route path="/messages" element={<Messages />} />
         <Route path="/points" element={<Points />} />
         <Route path="/stats" element={<Statistics />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/movies" element={<MovieList />} />
+        <Route path="/diary" element={<Diary />} />
+        <Route path="/surprises" element={<SurpriseReminders />} />
       </Routes>
     </BrowserRouter>
   );

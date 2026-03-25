@@ -51,6 +51,8 @@ func main() {
 		&models.Movie{},
 		&models.Diary{},
 		&models.Reminder{},
+		&models.MealWish{},
+		&models.MealHistory{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -133,7 +135,7 @@ func main() {
 			recipes.POST("/:id/vote", recipeHandler.VoteRecipe)
 		}
 
-		// Meal vote routes
+		// Meal vote routes (legacy, kept for compatibility)
 		meals := api.Group("/meals")
 		{
 			meals.GET("/today", mealHandler.GetTodayVote)
@@ -141,6 +143,20 @@ func main() {
 			meals.POST("/:id/vote", mealHandler.SubmitVote)
 			meals.GET("/:id/votes", mealHandler.GetVoteResult)
 			meals.GET("/history", mealHandler.GetHistoricalVotes)
+		}
+
+		// Meal wish routes (new - 想吃清单)
+		mealWishHandler := handlers.NewMealWishHandler(db)
+		meal := api.Group("/meal")
+		{
+			meal.GET("/wishes", mealWishHandler.GetWishes)
+			meal.POST("/wishes", mealWishHandler.AddWish)
+			meal.PUT("/wishes/:id", mealWishHandler.UpdateWish)
+			meal.DELETE("/wishes/:id", mealWishHandler.DeleteWish)
+			meal.POST("/wishes/:id/done", mealWishHandler.MarkDone)
+			meal.GET("/recommend", mealWishHandler.GetRecommendation)
+			meal.GET("/history", mealWishHandler.GetHistory)
+			meal.POST("/history", mealWishHandler.AddHistory)
 		}
 
 		// Chore routes
