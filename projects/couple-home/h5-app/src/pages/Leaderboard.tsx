@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useChoreStore } from '../store/choreStore';
-import { useAppStore } from '../store/appStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
 import LeaderboardDisplay from '../components/LeaderboardDisplay';
@@ -9,7 +8,7 @@ import StatsCard from '../components/StatsCard';
 export default function Leaderboard() {
   const { leaderboard, userStats, partnerStats, loadLeaderboard, loadStats } =
     useChoreStore();
-  const { settings } = useAppStore();
+  const settings = { nickname: '我', partnerNickname: 'TA' };
 
   useEffect(() => {
     loadLeaderboard();

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useChoreStore } from '../store/choreStore';
-import { useAppStore } from '../store/appStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
 import ChoreList from '../components/ChoreList';
@@ -18,7 +17,7 @@ export default function Chores() {
     claimChore,
     completeChore,
   } = useChoreStore();
-  const { settings } = useAppStore();
+  const settings = { nickname: '��', partnerNickname: 'TA' };
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'completed'>(
     'pending'
   );

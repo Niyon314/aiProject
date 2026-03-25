@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '../store/appStore';
+import { useFridgeStore } from '../store/fridgeStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
-import type { FridgeItem } from '../utils/db';
+import type { FridgeItem } from '../store/fridgeStore';
 
 type Category = 'all' | 'vegetable' | 'meat' | 'egg' | 'staple' | 'other';
 
@@ -28,31 +28,31 @@ const categoryLabels: Record<Category, string> = {
 export default function Fridge() {
   const navigate = useNavigate();
   const { 
-    fridgeItems, 
-    loadFridgeItems, 
-    addFridgeItem, 
-    updateFridgeItem, 
-    deleteFridgeItem,
+    items, 
+    loadItems, 
+    addItem, 
+    updateItem, 
+    deleteItem,
     checkExpiryStatus,
-  } = useAppStore();
+  } = useFridgeStore();
   
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingItem, setEditingItem] = useState<FridgeItem | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
 
   useEffect(() => {
-    loadFridgeItems();
+    loadItems();
   }, []);
 
   // 过滤和排序食材
-  const filteredItems = fridgeItems
+  const filteredItems = items
     .filter(item => {
       if (selectedCategory === 'all') return true;
       return item.category === selectedCategory;
     })
     .sort((a, b) => {
       // 临期的排前面
-      const statusOrder = { warning: 0, fresh: 1, expired: 2 };
+      const statusOrder: Record<string, number> = { warning: 0, fresh: 1, expired: 2 };
       if (statusOrder[a.status] !== statusOrder[b.status]) {
         return statusOrder[a.status] - statusOrder[b.status];
       }
@@ -80,7 +80,7 @@ export default function Fridge() {
       status,
     };
 
-    await addFridgeItem(newItem);
+    await addItem(newItem);
     setShowAddModal(false);
   };
 
@@ -95,7 +95,7 @@ export default function Fridge() {
     const status = checkExpiryStatus(expiryDate);
     
     // 修复：使用完整 ISO 8601 格式
-    await updateFridgeItem(editingItem.id, {
+    await updateItem(editingItem.id, {
       name: formData.get('name') as string,
       quantity: parseFloat(formData.get('quantity') as string),
       unit: formData.get('unit') as string,
@@ -109,7 +109,7 @@ export default function Fridge() {
 
   const handleDelete = async (id: string) => {
     if (confirm('确定要删除这个食材吗？')) {
-      await deleteFridgeItem(id);
+      await deleteItem(id);
     }
   };
 
@@ -143,7 +143,7 @@ export default function Fridge() {
       
       <div className="px-4 py-6 space-y-6">
         {/* AI 菜谱推荐入口 */}
-        {fridgeItems.length > 0 && (
+        {items.length > 0 && (
           <button
             onClick={() => navigate('/fridge/ai-recipes')}
             className="w-full bg-gradient-to-r from-primary to-primary-dark text-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all active:scale-95"
@@ -188,7 +188,7 @@ export default function Fridge() {
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">{categoryIcons[item.category]}</span>
+                    <span className="text-2xl">{(categoryIcons[item.category as Category] ?? "📦")}</span>
                     <div>
                       <p className="font-heading font-semibold text-gray-800">
                         {item.name}

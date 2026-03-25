@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '../store/appStore';
+import { useChoreStore } from '../store/choreStore';
+import { useBillStore } from '../store/billStore';
+import { useAnniversaryStore } from '../store/anniversaryStore';
 import TabBar from '../components/TabBar';
 import Header from '../components/Header';
 import AnniversaryCard from '../components/AnniversaryCard';
@@ -10,38 +12,18 @@ import type { Anniversary } from '../api/anniversaryApi';
 
 export default function Home() {
   const navigate = useNavigate();
-  const { 
-    settings, 
-    loadSettings, 
-    loadChores, 
-    loadBills,
-    loadAnniversaries,
-    chores,
-    bills,
-    anniversaries,
-    calculateDaysTogether,
-  } = useAppStore();
+  const { chores, loadChores } = useChoreStore();
+  const { bills, loadBills } = useBillStore();
+  const { anniversaries, loadAnniversaries, calculateDaysTogether } = useAnniversaryStore();
 
   useEffect(() => {
-    loadSettings();
     loadChores();
     loadBills();
     loadAnniversaries();
   }, []);
 
-  if (!settings) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl animate-heart-beat mb-4">💕</div>
-          <p className="text-white text-lg font-heading">加载中，马上就好~</p>
-        </div>
-      </div>
-    );
-  }
-
-  const pendingChores = chores.filter(c => c.status === 'pending').length;
-  const pendingBills = bills.filter(b => b.status === 'pending').length;
+  const pendingChores = chores.filter((c: any) => c.status === 'pending').length;
+  const pendingBills = bills.filter((b: any) => b.status === 'pending').length;
 
   // 根据时间段显示问候
   const getGreeting = () => {
@@ -55,6 +37,8 @@ export default function Home() {
     return '🌙 夜深了';
   };
 
+  const nickname = '宝贝';
+
   return (
     <div className="min-h-screen pb-[80px] animate-fade-in">
       <Header title="我们的小家" showNotification />
@@ -62,7 +46,7 @@ export default function Home() {
       <div className="px-4 py-6 space-y-6">
         {/* 问候 */}
         <div className="text-white">
-          <p className="text-lg mb-1">{getGreeting()}，{settings.nickname} 💕</p>
+          <p className="text-lg mb-1">{getGreeting()}，{nickname} 💕</p>
           <p className="text-white/80">
             {new Date().toLocaleDateString('zh-CN', { 
               year: 'numeric', 
@@ -129,11 +113,11 @@ export default function Home() {
           <h3 className="text-white font-heading font-semibold mb-3">📊 我的数据</h3>
           <div className="grid grid-cols-3 gap-3 text-center text-white text-sm">
             <div>
-              <p className="text-2xl font-bold">{chores.filter(c => c.status === 'completed').length}</p>
+              <p className="text-2xl font-bold">{chores.filter((c: any) => c.status === 'completed').length}</p>
               <p className="opacity-80">完成家务</p>
             </div>
             <div>
-              <p className="text-2xl font-bold">{bills.filter(b => b.status === 'confirmed').length}</p>
+              <p className="text-2xl font-bold">{bills.filter((b: any) => b.status === 'confirmed').length}</p>
               <p className="opacity-80">确认账单</p>
             </div>
             <div>

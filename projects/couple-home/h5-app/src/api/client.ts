@@ -91,7 +91,7 @@ export const billApi = {
     return handleResponse(response);
   },
   
-  create: async (bill: { title: string; amount: number; payer: string; category: string }) => {
+  create: async (bill: { title: string; amount: number; payer: string; category: string; date?: string; note?: string }) => {
     const response = await fetch(`${API_BASE}/bills`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

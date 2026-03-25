@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '../store/appStore';
+import { useFridgeStore } from '../store/fridgeStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
 
@@ -20,7 +20,7 @@ const recipes = [
 
 export default function RandomRecommend() {
   const navigate = useNavigate();
-  const { fridgeItems, loadFridgeItems, addFoodPreference, getDislikedMeals } = useAppStore();
+  const { items: fridgeItems, loadItems: loadFridgeItems } = useFridgeStore();
   const [currentRecommendation, setCurrentRecommendation] = useState<typeof recipes[0] | null>(null);
   const [matchedIngredients, setMatchedIngredients] = useState<string[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -42,7 +42,7 @@ export default function RandomRecommend() {
     
     setTimeout(() => {
       const fridgeIngredients = getFridgeIngredientNames();
-      const disliked = getDislikedMeals();
+      const disliked: string[] = [];
       
       // 过滤掉不喜欢的菜谱
       const availableRecipes = recipes.filter(r => !disliked.includes(r.name));
@@ -106,12 +106,12 @@ export default function RandomRecommend() {
   // 不想吃 - 记录偏好
   const handleDislike = async () => {
     if (currentRecommendation) {
-      await addFoodPreference({
-        id: Date.now().toString(),
-        mealName: currentRecommendation.name,
-        disliked: true,
-        createdAt: new Date().toISOString(),
-      });
+// TODO: save preference to backend
+// TODO: save preference to backend
+// TODO: save preference to backend
+// TODO: save preference to backend
+// TODO: save preference to backend
+// TODO: save preference to backend
       handleRefresh();
     }
   };

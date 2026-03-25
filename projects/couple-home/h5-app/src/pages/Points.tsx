@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAppStore } from '../store/appStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
 import { pointsApi, type PointsRecord, type ShopItem, type RedeemedCoupon } from '../api/pointsApi';
 
 export default function Points() {
-  const { settings: _settings } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState({
     totalPoints: 0,

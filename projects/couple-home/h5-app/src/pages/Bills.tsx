@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useAppStore } from '../store/appStore';
+import { useBillStore } from '../store/billStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
-import type { Bill, Fund, Favor } from '../utils/db';
+import type { Bill, Fund, Favor } from '../store/billStore';
 
 type ViewMode = 'bills' | 'fund' | 'favor';
 
@@ -20,7 +20,7 @@ export default function Bills() {
     favors,
     loadFavors,
     addFavor,
-  } = useAppStore();
+  } = useBillStore();
   
   const [showAddForm, setShowAddForm] = useState(false);
   const [showFundForm, setShowFundForm] = useState(false);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMealWishStore } from '../store/mealWishStore';
-import { useAppStore } from '../store/appStore';
+import { useFridgeStore } from '../store/fridgeStore';
 import Header from '../components/Header';
 import TabBar from '../components/TabBar';
 
@@ -28,7 +28,7 @@ const recipes = [
 export default function MealHome() {
   const navigate = useNavigate();
   const { wishes, loadWishes } = useMealWishStore();
-  const { fridgeItems, loadFridgeItems } = useAppStore();
+  const { items: fridgeItems, loadItems: loadFridgeItems } = useFridgeStore();
   const [currentRecipe, setCurrentRecipe] = useState(recipes[0]);
   const [isShaking, setIsShaking] = useState(false);
   const [showAddWish, setShowAddWish] = useState(false);

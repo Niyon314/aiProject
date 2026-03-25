@@ -1,100 +1,71 @@
 import { create } from 'zustand';
-import { anniversaryApi, type Anniversary, type DaysTogetherResponse } from '../api/anniversaryApi';
+import { anniversaryApi, type Anniversary } from '../api/anniversaryApi';
 
 interface AnniversaryState {
-  // 状态
   anniversaries: Anniversary[];
   upcomingAnniversaries: Anniversary[];
-  daysTogether: DaysTogetherResponse | null;
-  isLoading: boolean;
+  daysTogether: any;
+  loading: boolean;
+  error: string | null;
 
-  // Actions
   loadAnniversaries: () => Promise<void>;
   loadUpcoming: () => Promise<void>;
   loadDaysTogether: () => Promise<void>;
-  createAnniversary: (data: {
-    name: string;
-    date: string;
-    icon: string;
-    type: 'festival' | 'birthday' | 'relationship' | 'other';
-    year: number;
-    isLunar: boolean;
-    reminderDays: number[];
-    notes?: string;
-  }) => Promise<void>;
-  updateAnniversary: (id: string, updates: Partial<Anniversary>) => Promise<void>;
-  deleteAnniversary: (id: string) => Promise<void>;
+  addAnniversary: (data: Partial<Anniversary>) => Promise<void>;
+  calculateDaysTogether: (dateStr: string) => number;
 }
 
-export const useAnniversaryStore = create<AnniversaryState>((set, get) => ({
-  // 初始状态
+export const useAnniversaryStore = create<AnniversaryState>((set) => ({
   anniversaries: [],
   upcomingAnniversaries: [],
   daysTogether: null,
-  isLoading: false,
+  loading: false,
+  error: null,
 
-  // 加载纪念日列表
   loadAnniversaries: async () => {
-    set({ isLoading: true });
+    set({ loading: true, error: null });
     try {
       const anniversaries = await anniversaryApi.getAll();
-      set({ anniversaries, isLoading: false });
-    } catch (error) {
-      console.error('Failed to load anniversaries:', error);
-      set({ isLoading: false });
+      set({ anniversaries: Array.isArray(anniversaries) ? anniversaries : [], loading: false });
+    } catch {
+      set({ error: '加载失败', loading: false });
     }
   },
 
-  // 加载即将到来的纪念日
   loadUpcoming: async () => {
     try {
       const upcomingAnniversaries = await anniversaryApi.getUpcoming();
-      set({ upcomingAnniversaries });
-    } catch (error) {
-      console.error('Failed to load upcoming anniversaries:', error);
+      set({ upcomingAnniversaries: Array.isArray(upcomingAnniversaries) ? upcomingAnniversaries : [] });
+    } catch {
+      // silent
     }
   },
 
-  // 加载在一起天数
   loadDaysTogether: async () => {
     try {
-      const daysTogether = await anniversaryApi.getDaysTogether();
-      set({ daysTogether });
-    } catch (error) {
-      console.error('Failed to load days together:', error);
+      const data = await anniversaryApi.getDaysTogether();
+      set({ daysTogether: data });
+    } catch {
+      // silent
     }
   },
 
-  // 创建纪念日
-  createAnniversary: async (data) => {
+  addAnniversary: async (data) => {
+    set({ loading: true, error: null });
     try {
-      await anniversaryApi.create(data);
-      await get().loadAnniversaries();
-    } catch (error) {
-      console.error('Failed to create anniversary:', error);
-      throw error;
+      const newItem = await anniversaryApi.create(data as any);
+      set(state => ({
+        anniversaries: [newItem, ...state.anniversaries],
+        loading: false,
+      }));
+    } catch {
+      set({ error: '添加失败', loading: false });
     }
   },
 
-  // 更新纪念日
-  updateAnniversary: async (id, updates) => {
-    try {
-      await anniversaryApi.update(id, updates);
-      await get().loadAnniversaries();
-    } catch (error) {
-      console.error('Failed to update anniversary:', error);
-      throw error;
-    }
-  },
-
-  // 删除纪念日
-  deleteAnniversary: async (id) => {
-    try {
-      await anniversaryApi.delete(id);
-      await get().loadAnniversaries();
-    } catch (error) {
-      console.error('Failed to delete anniversary:', error);
-      throw error;
-    }
+  calculateDaysTogether: (dateStr: string) => {
+    const start = new Date(dateStr);
+    const now = new Date();
+    return Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
   },
 }));
