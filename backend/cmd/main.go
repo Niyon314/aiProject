@@ -53,6 +53,10 @@ func main() {
 		&models.Reminder{},
 		&models.MealWish{},
 		&models.MealHistory{},
+		&handlers.MessageModel{},
+		&handlers.PointsRecord{},
+		&handlers.ShopItemModel{},
+		&handlers.RedeemedCoupon{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -106,9 +110,12 @@ func main() {
 		c.Next()
 	})
 
-	// Health check
+	// Health check (支持 GET 和 HEAD)
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
+	})
+	router.HEAD("/health", func(c *gin.Context) {
+		c.Status(200)
 	})
 
 	// API routes
@@ -266,6 +273,28 @@ func main() {
 
 		// Reminder routes
 		handlers.RegisterReminderRoutes(api, db)
+
+		// Message routes (留言板)
+		messageHandler := handlers.NewMessageHandler(db)
+		messages := api.Group("/messages")
+		{
+			messages.GET("", messageHandler.GetMessages)
+			messages.POST("", messageHandler.SendMessage)
+			messages.POST("/:id/read", messageHandler.MarkRead)
+			messages.POST("/read-all", messageHandler.MarkAllRead)
+		}
+
+		// Points routes (积分系统)
+		pointsHandler := handlers.NewPointsHandler(db)
+		points := api.Group("/points")
+		{
+			points.GET("", pointsHandler.GetPoints)
+			points.GET("/summary", pointsHandler.GetSummary)
+			points.GET("/shop", pointsHandler.GetShop)
+			points.POST("/redeem", pointsHandler.Redeem)
+			points.GET("/coupons", pointsHandler.GetCoupons)
+			points.POST("/coupons/:id/use", pointsHandler.UseCoupon)
+		}
 
 		// Statistics routes
 		statistics := api.Group("/statistics")

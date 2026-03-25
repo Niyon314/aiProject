@@ -26,11 +26,7 @@ func NewMovieHandler(db *gorm.DB) *MovieHandler {
 // GET /api/movies
 func (h *MovieHandler) GetMovies(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 获取筛选参数
 	watched := c.Query("watched") // true, false, all
@@ -121,11 +117,7 @@ func (h *MovieHandler) GetMovies(c *gin.Context) {
 // POST /api/movies
 func (h *MovieHandler) CreateMovie(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 解析请求体
 	var req models.CreateMovieRequest
@@ -163,11 +155,7 @@ func (h *MovieHandler) CreateMovie(c *gin.Context) {
 // PUT /api/movies/:id/watched
 func (h *MovieHandler) MarkWatched(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	movieID := c.Param("id")
 	if movieID == "" {
@@ -221,11 +209,7 @@ func (h *MovieHandler) MarkWatched(c *gin.Context) {
 // PUT /api/movies/:id/rate
 func (h *MovieHandler) RateMovie(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	movieID := c.Param("id")
 	if movieID == "" {
@@ -280,11 +264,7 @@ func (h *MovieHandler) RateMovie(c *gin.Context) {
 // DELETE /api/movies/:id
 func (h *MovieHandler) DeleteMovie(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	movieID := c.Param("id")
 	if movieID == "" {
@@ -316,11 +296,7 @@ func (h *MovieHandler) DeleteMovie(c *gin.Context) {
 // GET /api/movies/stats
 func (h *MovieHandler) GetMovieStats(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 统计数据
 	var totalMovies, watchedMovies int64

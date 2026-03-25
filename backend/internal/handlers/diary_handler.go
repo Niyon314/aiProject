@@ -27,11 +27,7 @@ func NewDiaryHandler(db *gorm.DB) *DiaryHandler {
 // GET /api/diaries
 func (h *DiaryHandler) GetDiaries(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 获取分页参数
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
@@ -103,11 +99,7 @@ func (h *DiaryHandler) GetDiaryByID(c *gin.Context) {
 	}
 
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	var diary models.Diary
 	if err := h.db.First(&diary, "id = ?", diaryID).Error; err != nil {
@@ -132,11 +124,7 @@ func (h *DiaryHandler) GetDiaryByID(c *gin.Context) {
 // POST /api/diaries
 func (h *DiaryHandler) CreateDiary(c *gin.Context) {
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 解析请求体
 	var req models.CreateDiaryRequest
@@ -170,11 +158,7 @@ func (h *DiaryHandler) UpdateDiary(c *gin.Context) {
 	}
 
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 查询日记
 	var diary models.Diary
@@ -220,11 +204,7 @@ func (h *DiaryHandler) DeleteDiary(c *gin.Context) {
 	}
 
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 查询日记
 	var diary models.Diary
@@ -262,11 +242,7 @@ func (h *DiaryHandler) UploadPhotos(c *gin.Context) {
 	}
 
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 查询日记
 	var diary models.Diary
@@ -328,11 +304,7 @@ func (h *DiaryHandler) UpdatePrivacy(c *gin.Context) {
 	}
 
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 查询日记
 	var diary models.Diary
@@ -378,11 +350,7 @@ func (h *DiaryHandler) GetDiariesByMonth(c *gin.Context) {
 	}
 
 	// 从上下文获取用户信息
-	userID, exists := c.Get("userID")
-	if !exists {
-		c.JSON(401, gin.H{"error": "未登录"})
-		return
-	}
+	userID := getDefaultUserID(c)
 
 	// 构建查询
 	query := h.db.Model(&models.Diary{}).Where("date LIKE ?", month+"%")

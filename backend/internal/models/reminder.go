@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,9 +14,9 @@ type Reminder struct {
 	Date          time.Time `json:"date" gorm:"not null"`            // 提醒日期
 	Type          string    `json:"type" gorm:"not null"`            // 类型：birthday, anniversary, holiday, custom
 	Notes         string    `json:"notes,omitempty"`                 // 备注信息
-	ReminderDays  []int     `json:"reminderDays" gorm:"type:int[]"`  // 提前提醒天数：[7, 3, 1]
-	GiftIdeas     []string  `json:"giftIdeas" gorm:"type:text[]"`    // 礼物推荐列表
-	DateIdeas     []string  `json:"dateIdeas" gorm:"type:text[]"`    // 约会安排建议
+	ReminderDays  string   `json:"reminderDays" gorm:"type:text;default:'[]'"`  // JSON array: [7, 3, 1]
+	GiftIdeas     string   `json:"giftIdeas" gorm:"type:text;default:'[]'"`    // JSON array
+	DateIdeas     string   `json:"dateIdeas" gorm:"type:text;default:'[]'"`    // JSON array
 	PartnerID     string    `json:"partnerId,omitempty"`             // 关联的伴侣 ID
 	PartnerName   string    `json:"partnerName,omitempty"`           // 伴侣姓名（用于显示）
 	IsRecurring   bool      `json:"isRecurring" gorm:"default:false"` // 是否每年重复
@@ -83,15 +84,31 @@ type DateIdeaResponse struct {
 
 // NewReminder 创建新的提醒实例
 func NewReminder(createdBy string, req CreateReminderRequest) *Reminder {
+	reminderDays := "[]"
+	if len(req.ReminderDays) > 0 {
+		b, _ := json.Marshal(req.ReminderDays)
+		reminderDays = string(b)
+	}
+	giftIdeas := "[]"
+	if len(req.GiftIdeas) > 0 {
+		b, _ := json.Marshal(req.GiftIdeas)
+		giftIdeas = string(b)
+	}
+	dateIdeas := "[]"
+	if len(req.DateIdeas) > 0 {
+		b, _ := json.Marshal(req.DateIdeas)
+		dateIdeas = string(b)
+	}
+
 	return &Reminder{
 		ID:           uuid.New().String(),
 		Title:        req.Title,
 		Date:         req.Date,
 		Type:         req.Type,
 		Notes:        req.Notes,
-		ReminderDays: req.ReminderDays,
-		GiftIdeas:    req.GiftIdeas,
-		DateIdeas:    req.DateIdeas,
+		ReminderDays: reminderDays,
+		GiftIdeas:    giftIdeas,
+		DateIdeas:    dateIdeas,
 		PartnerName:  req.PartnerName,
 		IsRecurring:  req.IsRecurring,
 		Status:       "active",
@@ -116,13 +133,16 @@ func (r *Reminder) Update(req UpdateReminderRequest) {
 		r.Notes = req.Notes
 	}
 	if req.ReminderDays != nil {
-		r.ReminderDays = req.ReminderDays
+		b, _ := json.Marshal(req.ReminderDays)
+		r.ReminderDays = string(b)
 	}
 	if req.GiftIdeas != nil {
-		r.GiftIdeas = req.GiftIdeas
+		b, _ := json.Marshal(req.GiftIdeas)
+		r.GiftIdeas = string(b)
 	}
 	if req.DateIdeas != nil {
-		r.DateIdeas = req.DateIdeas
+		b, _ := json.Marshal(req.DateIdeas)
+		r.DateIdeas = string(b)
 	}
 	if req.PartnerName != "" {
 		r.PartnerName = req.PartnerName
@@ -165,7 +185,11 @@ func (r *Reminder) ShouldNotify() bool {
 	}
 	
 	daysUntil := r.DaysUntil()
-	for _, day := range r.ReminderDays {
+	var days []int
+	if err := json.Unmarshal([]byte(r.ReminderDays), &days); err != nil {
+		return daysUntil == 0 || daysUntil == 1 || daysUntil == 3 || daysUntil == 7
+	}
+	for _, day := range days {
 		if daysUntil == day {
 			return true
 		}
