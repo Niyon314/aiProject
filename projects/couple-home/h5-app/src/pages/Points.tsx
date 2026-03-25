@@ -260,7 +260,7 @@ export default function Points() {
 
       {/* 兑换确认弹窗 */}
       {showRedeemModal && selectedItem && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-white rounded-xl w-full max-w-sm p-6">
             <div className="text-center mb-4">
               <span className="text-6xl">{selectedItem.icon}</span>
@@ -304,7 +304,7 @@ export default function Points() {
 
       {/* 兑换成功弹窗 - 显示券码 */}
       {showCouponModal && redeemedCoupon && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-white rounded-xl w-full max-w-sm p-6">
             <div className="text-center mb-4">
               <div className="text-6xl mb-2">🎉</div>

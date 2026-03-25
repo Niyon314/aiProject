@@ -193,7 +193,7 @@ export default function Chores() {
 
         {/* 添加表单 */}
         {showAddForm && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+          <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end">
             <div className="bg-white rounded-t-3xl w-full p-6 animate-slide-up">
               <h3 className="text-lg font-heading font-bold mb-4">
                 ➕ 添加家务任务

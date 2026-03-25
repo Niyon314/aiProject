@@ -54,7 +54,7 @@ export default function ChoreComplete({
 
       {/* 打卡弹窗 */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end sm:items-center justify-center animate-fade-in">
           <div className="bg-white rounded-t-3xl sm:rounded-3xl w-full sm:max-w-md p-6 animate-slide-up">
             {/* 头部 */}
             <div className="text-center mb-6">

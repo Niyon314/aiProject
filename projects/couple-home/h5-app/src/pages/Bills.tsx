@@ -454,7 +454,7 @@ export default function Bills() {
 
         {/* 添加账单表单 */}
         {showAddForm && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+          <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end">
             <div className="bg-white rounded-t-lg w-full p-6 animate-slide-in">
               <h3 className="text-lg font-heading font-semibold mb-4">添加账单</h3>
               
@@ -551,7 +551,7 @@ export default function Bills() {
 
         {/* 添加基金表单 */}
         {showFundForm && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+          <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end">
             <div className="bg-white rounded-t-lg w-full p-6 animate-slide-in">
               <h3 className="text-lg font-heading font-semibold mb-4">创建共同基金</h3>
               
@@ -633,7 +633,7 @@ export default function Bills() {
 
         {/* 添加人情表单 */}
         {showFavorForm && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+          <div className="fixed inset-0 bg-black/50 z-[9999] flex items-end">
             <div className="bg-white rounded-t-lg w-full p-6 animate-slide-in">
               <h3 className="text-lg font-heading font-semibold mb-4">添加人情记录</h3>
               

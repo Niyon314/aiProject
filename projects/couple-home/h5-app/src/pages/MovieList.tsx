@@ -374,7 +374,7 @@ export default function MovieList() {
 
       {/* 添加观影记录弹窗 */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-[9999] animate-fade-in">
           <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full max-w-md p-6 animate-slide-up">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-heading font-bold text-gray-800">🎬 添加观影记录</h3>
@@ -455,7 +455,7 @@ export default function MovieList() {
 
       {/* 评分弹窗 */}
       {showRateModal && selectedMovie && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-[9999] animate-fade-in">
           <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full max-w-md p-6 animate-slide-up">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-heading font-bold text-gray-800">⭐ 评分与影评</h3>

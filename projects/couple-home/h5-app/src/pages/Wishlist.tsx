@@ -355,7 +355,7 @@ export default function Wishlist() {
 
       {/* 添加愿望弹窗 */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-[9999] animate-fade-in">
           <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full max-w-md p-6 animate-slide-up">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-heading font-bold text-gray-800">🎯 创建新愿望</h3>
@@ -465,7 +465,7 @@ export default function Wishlist() {
 
       {/* 助力弹窗 */}
       {showContributeModal && selectedItem && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-[9999] animate-fade-in">
           <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full max-w-md p-6 animate-slide-up">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-heading font-bold text-gray-800">💰 为愿望助力</h3>

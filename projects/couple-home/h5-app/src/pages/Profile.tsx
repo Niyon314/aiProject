@@ -148,7 +148,7 @@ export default function Profile() {
 
         {/* 编辑表单 */}
         {isEditing && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4">
             <div className="bg-white rounded-lg w-full max-w-sm p-6 animate-fade-in">
               <h3 className="text-lg font-heading font-semibold mb-4">编辑资料</h3>
               
