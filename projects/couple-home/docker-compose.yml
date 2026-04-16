@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: couple-home-frontend:latest
+    container_name: couple-home
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/letsencrypt:ro
+      - certbot-www:/var/www/certbot
+    environment:
+      - DOMAIN_NAME=couple.example.com
+      - EMAIL=admin@example.com
+    depends_on:
+      - backend
+    networks:
+      - couple-network
+    restart: unless-stopped
+
+  backend:
+    image: couple-home-backend:latest
+    container_name: couple-home-backend
+    volumes:
+      - ./data:/root/data
+    environment:
+      - DB_DRIVER=sqlite
+      - DB_DSN=/root/data/couple_home.db
+      - GIN_MODE=release
+      - SERVER_PORT=8080
+    networks:
+      - couple-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: couple-certbot
+    volumes:
+      - ./ssl:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --quiet && docker restart couple-home || true; sleep 12h & wait $${!}; done;'"
+    networks:
+      - couple-network
+    restart: unless-stopped
+
+volumes:
+  certbot-www:
+
+networks:
+  couple-network:
+    driver: bridge

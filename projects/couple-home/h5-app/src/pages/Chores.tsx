@@ -56,12 +56,16 @@ export default function Chores() {
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
 
+    // 转换日期为 ISO 8601 格式
+    const dueDateValue = formData.get('dueDate') as string;
+    const isoDueDate = dueDateValue ? new Date(dueDateValue).toISOString() : new Date().toISOString();
+
     const newChore: Partial<Chore> = {
       name: formData.get('name') as string,
       icon: formData.get('icon') as string || '🧹',
       type: formData.get('type') as 'daily' | 'weekly' | 'monthly' | 'once',
       points: parseInt(formData.get('points') as string) || 10,
-      dueDate: formData.get('dueDate') as string,
+      dueDate: isoDueDate,
     };
 
     try {

@@ -63,12 +63,16 @@ export default function Bills() {
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
     
+    // 转换日期为 ISO 8601 格式
+    const dateValue = formData.get('date') as string;
+    const isoDate = dateValue ? new Date(dateValue).toISOString() : new Date().toISOString();
+    
     const newBill: Bill = {
       id: Date.now().toString(),
       title: formData.get('title') as string,
       amount: parseFloat(formData.get('amount') as string),
       payer: formData.get('payer') as 'user' | 'partner',
-      date: formData.get('date') as string,
+      date: isoDate,
       category: formData.get('category') as string,
       status: 'pending',
     };
