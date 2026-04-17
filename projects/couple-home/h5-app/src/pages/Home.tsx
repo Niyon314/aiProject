@@ -89,12 +89,13 @@ export default function Home() {
           <h2 className="text-white text-lg font-heading font-semibold mb-3">
             🚀 常用功能
           </h2>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-5 gap-3">
             {[
               { icon: '🧊', label: '冰箱', path: '/fridge' },
               { icon: '💌', label: '留言', path: '/messages' },
               { icon: '📊', label: '统计', path: '/stats' },
               { icon: '🏆', label: '积分', path: '/points' },
+              { icon: '📸', label: '照片', path: '/photos' },
             ].map(item => (
               <button
                 key={item.path}

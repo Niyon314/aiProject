@@ -57,6 +57,7 @@ func main() {
 		&handlers.PointsRecord{},
 		&handlers.ShopItemModel{},
 		&handlers.RedeemedCoupon{},
+		&handlers.Photo{},
 	); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
@@ -94,6 +95,10 @@ func main() {
 	anniversaryHandler := handlers.NewAnniversaryHandler(anniversaryService)
 	statisticsHandler := handlers.NewStatisticsHandler(db)
 	themeHandler := handlers.NewThemeHandler(themeService)
+	photoHandler := handlers.NewPhotoHandler(db)
+
+	// Initialize WebSocket hub
+	handlers.InitWSHub()
 
 	// Initialize router
 	router := gin.Default()
@@ -117,6 +122,13 @@ func main() {
 	router.HEAD("/health", func(c *gin.Context) {
 		c.Status(200)
 	})
+
+	// WebSocket route
+	router.GET("/ws", handlers.HandleWebSocket)
+	router.GET("/api/ws/online", handlers.GetOnlineCount)
+
+	// Static files (photos)
+	router.Static("/uploads", "./uploads")
 
 	// API routes
 	api := router.Group("/api")
@@ -331,6 +343,15 @@ func main() {
 				themes.POST("/reset", themeHandler.ResetThemeConfig)
 			}
 			settings.GET("/themes", themeHandler.GetAvailableThemes)
+		}
+
+		// Photo routes (照片墙)
+		photos := api.Group("/photos")
+		{
+			photos.GET("", photoHandler.GetPhotos)
+			photos.GET("/:id", photoHandler.GetPhoto)
+			photos.POST("/upload", photoHandler.UploadPhoto)
+			photos.DELETE("/:id", photoHandler.DeletePhoto)
 		}
 	}
 

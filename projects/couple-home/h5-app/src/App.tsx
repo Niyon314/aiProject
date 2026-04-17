@@ -69,6 +69,9 @@ const DiaryLazy = React.lazy(() => import('./pages/Diary'));
 const SurpriseReminders = () => <Suspense fallback={<PageLoader />}><SurpriseRemindersLazy /></Suspense>;
 const SurpriseRemindersLazy = React.lazy(() => import('./pages/SurpriseReminders'));
 
+const Photos = () => <Suspense fallback={<PageLoader />}><PhotosLazy /></Suspense>;
+const PhotosLazy = React.lazy(() => import('./pages/Photos'));
+
 // Loading component for lazy pages
 function PageLoader() {
   return (
@@ -107,6 +110,7 @@ function App() {
           <Route path="/movies" element={<MovieList />} />
           <Route path="/diary" element={<Diary />} />
           <Route path="/surprises" element={<SurpriseReminders />} />
+          <Route path="/photos" element={<Photos />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>
