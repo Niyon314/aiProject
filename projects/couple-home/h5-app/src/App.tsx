@@ -1,8 +1,12 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Lazy load all pages for code splitting
+const Login = () => <Suspense fallback={<PageLoader />}><LoginLazy /></Suspense>;
+const LoginLazy = React.lazy(() => import('./pages/Login'));
+
 const Home = () => <Suspense fallback={<PageLoader />}><HomeLazy /></Suspense>;
 const HomeLazy = React.lazy(() => import('./pages/Home'));
 
@@ -86,31 +90,35 @@ function App() {
     <BrowserRouter>
       <ThemeProvider>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/anniversaries" element={<Anniversaries />} />
-          <Route path="/add" element={<Add />} />
-          <Route path="/chores" element={<Chores />} />
-          <Route path="/chores/leaderboard" element={<Leaderboard />} />
-          <Route path="/bills" element={<Bills />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/theme" element={<ThemeSettings />} />
-          <Route path="/fridge" element={<Fridge />} />
-          <Route path="/fridge/ai-recipes" element={<AIRecipes />} />
+          {/* 公开路由 */}
+          <Route path="/login" element={<Login />} />
+          
+          {/* 需要认证的路由 */}
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/schedule" element={<ProtectedRoute><Schedule /></ProtectedRoute>} />
+          <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+          <Route path="/anniversaries" element={<ProtectedRoute><Anniversaries /></ProtectedRoute>} />
+          <Route path="/add" element={<ProtectedRoute><Add /></ProtectedRoute>} />
+          <Route path="/chores" element={<ProtectedRoute><Chores /></ProtectedRoute>} />
+          <Route path="/chores/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+          <Route path="/bills" element={<ProtectedRoute><Bills /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/profile/theme" element={<ProtectedRoute><ThemeSettings /></ProtectedRoute>} />
+          <Route path="/fridge" element={<ProtectedRoute><Fridge /></ProtectedRoute>} />
+          <Route path="/fridge/ai-recipes" element={<ProtectedRoute><AIRecipes /></ProtectedRoute>} />
           {/* 吃饭模块（新） */}
-          <Route path="/meal" element={<MealHome />} />
-          <Route path="/meal/wishlist" element={<MealWishlist />} />
-          <Route path="/eating/random" element={<RandomRecommend />} />
+          <Route path="/meal" element={<ProtectedRoute><MealHome /></ProtectedRoute>} />
+          <Route path="/meal/wishlist" element={<ProtectedRoute><MealWishlist /></ProtectedRoute>} />
+          <Route path="/eating/random" element={<ProtectedRoute><RandomRecommend /></ProtectedRoute>} />
           {/* 其他 */}
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/points" element={<Points />} />
-          <Route path="/stats" element={<Statistics />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/movies" element={<MovieList />} />
-          <Route path="/diary" element={<Diary />} />
-          <Route path="/surprises" element={<SurpriseReminders />} />
-          <Route path="/photos" element={<Photos />} />
+          <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+          <Route path="/points" element={<ProtectedRoute><Points /></ProtectedRoute>} />
+          <Route path="/stats" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
+          <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
+          <Route path="/movies" element={<ProtectedRoute><MovieList /></ProtectedRoute>} />
+          <Route path="/diary" element={<ProtectedRoute><Diary /></ProtectedRoute>} />
+          <Route path="/surprises" element={<ProtectedRoute><SurpriseReminders /></ProtectedRoute>} />
+          <Route path="/photos" element={<ProtectedRoute><Photos /></ProtectedRoute>} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>
