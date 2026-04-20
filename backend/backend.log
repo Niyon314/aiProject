@@ -1,0 +1,775 @@
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.045ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="fridge_items"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.075ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "fridge_items" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.021ms] [34;1m[rows:-][0m SELECT * FROM `fridge_items` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "fridge_items" AND name = "idx_fridge_items_deleted_at"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.014ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="recipes"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.046ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "recipes" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.016ms] [34;1m[rows:-][0m SELECT * FROM `recipes` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "recipes" AND name = "recipes"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.263ms] [34;1m[rows:0][0m CREATE TABLE `recipes__temp`  (`id` text,`name` text NOT NULL,`icon` text,`cook_time` integer NOT NULL,`difficulty` text,`cost` decimal(10,2),`tags` text,`avg_rating` decimal(3,2) DEFAULT 0,`rate_count` integer DEFAULT 0,`created_at` datetime,`updated_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.057ms] [34;1m[rows:5][0m INSERT INTO `recipes__temp`(`id`,`name`,`icon`,`cook_time`,`difficulty`,`cost`,`tags`,`avg_rating`,`rate_count`,`created_at`,`updated_at`) SELECT `id`,`name`,`icon`,`cook_time`,`difficulty`,`cost`,`tags`,`avg_rating`,`rate_count`,`created_at`,`updated_at` FROM `recipes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.181ms] [34;1m[rows:5][0m DROP TABLE `recipes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.152ms] [34;1m[rows:5][0m ALTER TABLE `recipes__temp` RENAME TO `recipes`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.026ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.022ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "recipes" AND name = "recipes"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.171ms] [34;1m[rows:5][0m CREATE TABLE `recipes__temp`  (`id` text,`name` text NOT NULL,`icon` text,`cook_time` integer NOT NULL,`difficulty` text,`cost` decimal(10,2),`tags` text,`avg_rating` decimal(3,2) DEFAULT 0,`rate_count` integer DEFAULT 0,`created_at` datetime,`updated_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.028ms] [34;1m[rows:5][0m INSERT INTO `recipes__temp`(`id`,`name`,`icon`,`cook_time`,`difficulty`,`cost`,`tags`,`avg_rating`,`rate_count`,`created_at`,`updated_at`) SELECT `id`,`name`,`icon`,`cook_time`,`difficulty`,`cost`,`tags`,`avg_rating`,`rate_count`,`created_at`,`updated_at` FROM `recipes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.072ms] [34;1m[rows:5][0m DROP TABLE `recipes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.092ms] [34;1m[rows:5][0m ALTER TABLE `recipes__temp` RENAME TO `recipes`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.026ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="recipe_ingredients"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.082ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "recipe_ingredients" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.020ms] [34;1m[rows:-][0m SELECT * FROM `recipe_ingredients` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.025ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "table" AND tbl_name = "recipe_ingredients" AND (sql LIKE "%CONSTRAINT \"fk_recipes_ingredients\" %" OR sql LIKE "%CONSTRAINT fk_recipes_ingredients %" OR sql LIKE "%CONSTRAINT `fk_recipes_ingredients`%" OR sql LIKE "%CONSTRAINT [fk_recipes_ingredients]%" OR sql LIKE "%CONSTRAINT 	fk_recipes_ingredients	%")
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "recipe_ingredients" AND name = "idx_recipe_ingredients_recipe_id"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.011ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="bills"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.053ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "bills" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.019ms] [34;1m[rows:-][0m SELECT * FROM `bills` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "bills" AND name = "bills"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.189ms] [34;1m[rows:5][0m CREATE TABLE `bills__temp`  (`id` text,`title` text NOT NULL,`amount` decimal(10,2) NOT NULL,`payer` text NOT NULL,`date` datetime NOT NULL,`category` text,`photo` text,`note` text,`is_shared` numeric DEFAULT true,`fund_contribution_id` text,`created_at` datetime,`updated_at` datetime,`deleted_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.025ms] [34;1m[rows:0][0m INSERT INTO `bills__temp`(`id`,`title`,`amount`,`payer`,`date`,`category`,`photo`,`note`,`is_shared`,`fund_contribution_id`,`created_at`,`updated_at`,`deleted_at`) SELECT `id`,`title`,`amount`,`payer`,`date`,`category`,`photo`,`note`,`is_shared`,`fund_contribution_id`,`created_at`,`updated_at`,`deleted_at` FROM `bills`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.076ms] [34;1m[rows:0][0m DROP TABLE `bills`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.062ms] [34;1m[rows:0][0m ALTER TABLE `bills__temp` RENAME TO `bills`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.037ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "bills" AND name = "idx_bills_deleted_at"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[2.202ms] [34;1m[rows:0][0m CREATE INDEX `idx_bills_deleted_at` ON `bills`(`deleted_at`)
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.024ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="common_funds"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.081ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "common_funds" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.021ms] [34;1m[rows:-][0m SELECT * FROM `common_funds` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.014ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.014ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "common_funds" AND name = "common_funds"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.148ms] [34;1m[rows:0][0m CREATE TABLE `common_funds__temp`  (`id` text,`name` text NOT NULL,`target_amount` decimal(10,2) NOT NULL,`current_amount` decimal(10,2) DEFAULT 0,`monthly_goal` decimal(10,2),`created_at` datetime,`updated_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.026ms] [34;1m[rows:1][0m INSERT INTO `common_funds__temp`(`id`,`name`,`target_amount`,`current_amount`,`monthly_goal`,`created_at`,`updated_at`) SELECT `id`,`name`,`target_amount`,`current_amount`,`monthly_goal`,`created_at`,`updated_at` FROM `common_funds`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.061ms] [34;1m[rows:1][0m DROP TABLE `common_funds`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.116ms] [34;1m[rows:1][0m ALTER TABLE `common_funds__temp` RENAME TO `common_funds`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.027ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.033ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "common_funds" AND name = "common_funds"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.158ms] [34;1m[rows:1][0m CREATE TABLE `common_funds__temp`  (`id` text,`name` text NOT NULL,`target_amount` decimal(10,2) NOT NULL,`current_amount` decimal(10,2) DEFAULT 0,`monthly_goal` decimal(10,2),`created_at` datetime,`updated_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.032ms] [34;1m[rows:1][0m INSERT INTO `common_funds__temp`(`id`,`name`,`target_amount`,`current_amount`,`monthly_goal`,`created_at`,`updated_at`) SELECT `id`,`name`,`target_amount`,`current_amount`,`monthly_goal`,`created_at`,`updated_at` FROM `common_funds`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.052ms] [34;1m[rows:1][0m DROP TABLE `common_funds`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.012ms] [34;1m[rows:1][0m ALTER TABLE `common_funds__temp` RENAME TO `common_funds`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.023ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.020ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "common_funds" AND name = "common_funds"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.147ms] [34;1m[rows:1][0m CREATE TABLE `common_funds__temp`  (`id` text,`name` text NOT NULL,`target_amount` decimal(10,2) NOT NULL,`current_amount` decimal(10,2) DEFAULT 0,`monthly_goal` decimal(10,2),`created_at` datetime,`updated_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.023ms] [34;1m[rows:1][0m INSERT INTO `common_funds__temp`(`id`,`name`,`target_amount`,`current_amount`,`monthly_goal`,`created_at`,`updated_at`) SELECT `id`,`name`,`target_amount`,`current_amount`,`monthly_goal`,`created_at`,`updated_at` FROM `common_funds`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.062ms] [34;1m[rows:1][0m DROP TABLE `common_funds`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.063ms] [34;1m[rows:1][0m ALTER TABLE `common_funds__temp` RENAME TO `common_funds`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.032ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="fund_contributions"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.079ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "fund_contributions" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.019ms] [34;1m[rows:-][0m SELECT * FROM `fund_contributions` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.013ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "fund_contributions" AND name = "fund_contributions"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.139ms] [34;1m[rows:1][0m CREATE TABLE `fund_contributions__temp`  (`id` text,`fund_id` text NOT NULL,`amount` decimal(10,2) NOT NULL,`contributor` text NOT NULL,`note` text,`created_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.019ms] [34;1m[rows:0][0m INSERT INTO `fund_contributions__temp`(`id`,`fund_id`,`amount`,`contributor`,`note`,`created_at`) SELECT `id`,`fund_id`,`amount`,`contributor`,`note`,`created_at` FROM `fund_contributions`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.085ms] [34;1m[rows:0][0m DROP TABLE `fund_contributions`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.017ms] [34;1m[rows:0][0m ALTER TABLE `fund_contributions__temp` RENAME TO `fund_contributions`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.030ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "fund_contributions" AND name = "idx_fund_contributions_fund_id"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[2.100ms] [34;1m[rows:0][0m CREATE INDEX `idx_fund_contributions_fund_id` ON `fund_contributions`(`fund_id`)
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.031ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="user_preferences"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.058ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "user_preferences" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.021ms] [34;1m[rows:-][0m SELECT * FROM `user_preferences` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "user_preferences" AND name = "user_preferences"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.147ms] [34;1m[rows:0][0m CREATE TABLE `user_preferences__temp`  (`id` text,`favorite_tags` text,`disliked_tags` text,`max_cook_time` integer DEFAULT 60,`max_difficulty` text DEFAULT "medium",`budget_per_meal` decimal(10,2),`dietary_restrictions` text,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.021ms] [34;1m[rows:0][0m INSERT INTO `user_preferences__temp`(`id`,`favorite_tags`,`disliked_tags`,`max_cook_time`,`max_difficulty`,`budget_per_meal`,`dietary_restrictions`) SELECT `id`,`favorite_tags`,`disliked_tags`,`max_cook_time`,`max_difficulty`,`budget_per_meal`,`dietary_restrictions` FROM `user_preferences`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.078ms] [34;1m[rows:0][0m DROP TABLE `user_preferences`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.982ms] [34;1m[rows:0][0m ALTER TABLE `user_preferences__temp` RENAME TO `user_preferences`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.033ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="recipe_votes"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.070ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "recipe_votes" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.019ms] [34;1m[rows:-][0m SELECT * FROM `recipe_votes` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.016ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "recipe_votes" AND name = "idx_recipe_votes_recipe_id"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="meal_options"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.046ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "meal_options" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT * FROM `meal_options` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "meal_options" AND name = "meal_options"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.187ms] [34;1m[rows:0][0m CREATE TABLE `meal_options__temp`  (`id` text,`vote_id` text NOT NULL,`recipe_id` text NOT NULL,`name` text NOT NULL,`icon` text,`cook_time` integer NOT NULL,`difficulty` text,`cost` decimal(10,2),`tags` text,`like_count` integer DEFAULT 0,`dislike_count` integer DEFAULT 0,`veto_count` integer DEFAULT 0,PRIMARY KEY (`id`),CONSTRAINT `fk_meal_votes_options` FOREIGN KEY (`vote_id`) REFERENCES `meal_votes`(`id`) ON DELETE CASCADE)
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.025ms] [34;1m[rows:0][0m INSERT INTO `meal_options__temp`(`id`,`vote_id`,`recipe_id`,`name`,`icon`,`cook_time`,`difficulty`,`cost`,`tags`,`like_count`,`dislike_count`,`veto_count`) SELECT `id`,`vote_id`,`recipe_id`,`name`,`icon`,`cook_time`,`difficulty`,`cost`,`tags`,`like_count`,`dislike_count`,`veto_count` FROM `meal_options`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.067ms] [34;1m[rows:0][0m DROP TABLE `meal_options`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.997ms] [34;1m[rows:0][0m ALTER TABLE `meal_options__temp` RENAME TO `meal_options`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.050ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "table" AND tbl_name = "meal_options" AND (sql LIKE "%CONSTRAINT \"fk_meal_votes_options\" %" OR sql LIKE "%CONSTRAINT fk_meal_votes_options %" OR sql LIKE "%CONSTRAINT `fk_meal_votes_options`%" OR sql LIKE "%CONSTRAINT [fk_meal_votes_options]%" OR sql LIKE "%CONSTRAINT 	fk_meal_votes_options	%")
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.018ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "meal_options" AND name = "idx_meal_options_vote_id"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[2.500ms] [34;1m[rows:0][0m CREATE INDEX `idx_meal_options_vote_id` ON `meal_options`(`vote_id`)
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.025ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="meal_votes"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.097ms] [34;1m[rows:3][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "meal_votes" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.022ms] [34;1m[rows:-][0m SELECT * FROM `meal_votes` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.024ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "table" AND tbl_name = "meal_votes" AND (sql LIKE "%CONSTRAINT \"fk_meal_votes_result\" %" OR sql LIKE "%CONSTRAINT fk_meal_votes_result %" OR sql LIKE "%CONSTRAINT `fk_meal_votes_result`%" OR sql LIKE "%CONSTRAINT [fk_meal_votes_result]%" OR sql LIKE "%CONSTRAINT 	fk_meal_votes_result	%")
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "meal_votes" AND name = "idx_meal_votes_date"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "meal_votes" AND name = "idx_meal_votes_deleted_at"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="user_votes"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.055ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "user_votes" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT * FROM `user_votes` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.011ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "user_votes" AND name = "user_votes"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.152ms] [34;1m[rows:0][0m CREATE TABLE `user_votes__temp`  (`id` text,`vote_id` text NOT NULL,`voter` text NOT NULL,`option_id` text NOT NULL,`vote_type` text NOT NULL,`timestamp` datetime,PRIMARY KEY (`id`),CONSTRAINT `fk_meal_votes_user_vote` FOREIGN KEY (`vote_id`) REFERENCES `meal_votes`(`id`) ON DELETE CASCADE,CONSTRAINT `fk_meal_votes_partner_vote` FOREIGN KEY (`vote_id`) REFERENCES `meal_votes`(`id`) ON DELETE CASCADE)
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.021ms] [34;1m[rows:0][0m INSERT INTO `user_votes__temp`(`id`,`vote_id`,`voter`,`option_id`,`vote_type`,`timestamp`) SELECT `id`,`vote_id`,`voter`,`option_id`,`vote_type`,`timestamp` FROM `user_votes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.069ms] [34;1m[rows:0][0m DROP TABLE `user_votes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.986ms] [34;1m[rows:0][0m ALTER TABLE `user_votes__temp` RENAME TO `user_votes`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.028ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.029ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "user_votes" AND name = "user_votes"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.185ms] [34;1m[rows:0][0m CREATE TABLE `user_votes__temp`  (`id` text,`vote_id` text NOT NULL,`voter` text NOT NULL,`option_id` text NOT NULL,`vote_type` text NOT NULL,`timestamp` datetime,PRIMARY KEY (`id`),CONSTRAINT `fk_meal_votes_user_vote` FOREIGN KEY (`vote_id`) REFERENCES `meal_votes`(`id`) ON DELETE CASCADE,CONSTRAINT `fk_meal_votes_partner_vote` FOREIGN KEY (`vote_id`) REFERENCES `meal_votes`(`id`) ON DELETE CASCADE)
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.019ms] [34;1m[rows:0][0m INSERT INTO `user_votes__temp`(`id`,`vote_id`,`voter`,`option_id`,`vote_type`,`timestamp`) SELECT `id`,`vote_id`,`voter`,`option_id`,`vote_type`,`timestamp` FROM `user_votes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.052ms] [34;1m[rows:0][0m DROP TABLE `user_votes`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.082ms] [34;1m[rows:0][0m ALTER TABLE `user_votes__temp` RENAME TO `user_votes`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.047ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "table" AND tbl_name = "user_votes" AND (sql LIKE "%CONSTRAINT \"fk_meal_votes_user_vote\" %" OR sql LIKE "%CONSTRAINT fk_meal_votes_user_vote %" OR sql LIKE "%CONSTRAINT `fk_meal_votes_user_vote`%" OR sql LIKE "%CONSTRAINT [fk_meal_votes_user_vote]%" OR sql LIKE "%CONSTRAINT 	fk_meal_votes_user_vote	%")
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.017ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "table" AND tbl_name = "user_votes" AND (sql LIKE "%CONSTRAINT \"fk_meal_votes_partner_vote\" %" OR sql LIKE "%CONSTRAINT fk_meal_votes_partner_vote %" OR sql LIKE "%CONSTRAINT `fk_meal_votes_partner_vote`%" OR sql LIKE "%CONSTRAINT [fk_meal_votes_partner_vote]%" OR sql LIKE "%CONSTRAINT 	fk_meal_votes_partner_vote	%")
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "user_votes" AND name = "idx_vote_voter"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[2.440ms] [34;1m[rows:0][0m CREATE UNIQUE INDEX `idx_vote_voter` ON `user_votes`(`vote_id`,`voter`)
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.033ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="chores"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.069ms] [34;1m[rows:5][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "chores" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.037ms] [34;1m[rows:-][0m SELECT * FROM `chores` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.020ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "chores" AND name = "idx_chores_due_date"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.014ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "chores" AND name = "idx_chores_status"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.011ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "chores" AND name = "idx_chores_template_id"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "chores" AND name = "idx_chores_deleted_at"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="chore_templates"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.050ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "chore_templates" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.017ms] [34;1m[rows:-][0m SELECT * FROM `chore_templates` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.017ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "chore_templates" AND name = "idx_chore_templates_deleted_at"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.011ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="user_stats"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.041ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "user_stats" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.017ms] [34;1m[rows:-][0m SELECT * FROM `user_stats` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.018ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "user_stats" AND name = "user_stats"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.176ms] [34;1m[rows:0][0m CREATE TABLE `user_stats__temp`  (`user_id` text,`total_points` integer DEFAULT 0,`completed_tasks` integer DEFAULT 0,`on_time_tasks` integer DEFAULT 0,`early_tasks` integer DEFAULT 0,`late_tasks` integer DEFAULT 0,`on_time_rate` decimal(5,2) DEFAULT 0,`current_streak` integer DEFAULT 0,`longest_streak` integer DEFAULT 0,`week_points` integer DEFAULT 0,`updated_at` datetime,PRIMARY KEY (`user_id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.024ms] [34;1m[rows:0][0m INSERT INTO `user_stats__temp`(`user_id`,`total_points`,`completed_tasks`,`on_time_tasks`,`early_tasks`,`late_tasks`,`on_time_rate`,`current_streak`,`longest_streak`,`week_points`,`updated_at`) SELECT `user_id`,`total_points`,`completed_tasks`,`on_time_tasks`,`early_tasks`,`late_tasks`,`on_time_rate`,`current_streak`,`longest_streak`,`week_points`,`updated_at` FROM `user_stats`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.072ms] [34;1m[rows:0][0m DROP TABLE `user_stats`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.087ms] [34;1m[rows:0][0m ALTER TABLE `user_stats__temp` RENAME TO `user_stats`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.031ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="schedules"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.069ms] [34;1m[rows:4][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "schedules" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.027ms] [34;1m[rows:-][0m SELECT * FROM `schedules` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.025ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "schedules" AND name = "idx_schedules_start_time"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "schedules" AND name = "idx_schedules_status"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "schedules" AND name = "idx_schedules_deleted_at"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="anniversaries"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.049ms] [34;1m[rows:3][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "anniversaries" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.025ms] [34;1m[rows:-][0m SELECT * FROM `anniversaries` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.076ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "anniversaries" AND name = "idx_anniversaries_date"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.027ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "anniversaries" AND name = "idx_anniversaries_deleted_at"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.018ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="theme_configs"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.097ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "theme_configs" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.027ms] [34;1m[rows:-][0m SELECT * FROM `theme_configs` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="wishlist_items"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.050ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "wishlist_items" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.045ms] [34;1m[rows:-][0m SELECT * FROM `wishlist_items` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.029ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.166ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "wishlist_items" AND name = "wishlist_items"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.207ms] [34;1m[rows:0][0m CREATE TABLE `wishlist_items__temp`  (`id` text,`title` text NOT NULL,`description` text,`budget` decimal(10,2) NOT NULL,`current_amount` decimal(10,2) DEFAULT 0,`priority` integer NOT NULL,`status` text DEFAULT "pending",`deadline` datetime,`created_by` text NOT NULL,`created_at` datetime,`updated_at` datetime,`completed_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.026ms] [34;1m[rows:0][0m INSERT INTO `wishlist_items__temp`(`id`,`title`,`description`,`budget`,`current_amount`,`priority`,`status`,`deadline`,`created_by`,`created_at`,`updated_at`,`completed_at`) SELECT `id`,`title`,`description`,`budget`,`current_amount`,`priority`,`status`,`deadline`,`created_by`,`created_at`,`updated_at`,`completed_at` FROM `wishlist_items`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.088ms] [34;1m[rows:0][0m DROP TABLE `wishlist_items`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.174ms] [34;1m[rows:0][0m ALTER TABLE `wishlist_items__temp` RENAME TO `wishlist_items`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.024ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.022ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "wishlist_items" AND name = "wishlist_items"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.159ms] [34;1m[rows:0][0m CREATE TABLE `wishlist_items__temp`  (`id` text,`title` text NOT NULL,`description` text,`budget` decimal(10,2) NOT NULL,`current_amount` decimal(10,2) DEFAULT 0,`priority` integer NOT NULL,`status` text DEFAULT "pending",`deadline` datetime,`created_by` text NOT NULL,`created_at` datetime,`updated_at` datetime,`completed_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.026ms] [34;1m[rows:0][0m INSERT INTO `wishlist_items__temp`(`id`,`title`,`description`,`budget`,`current_amount`,`priority`,`status`,`deadline`,`created_by`,`created_at`,`updated_at`,`completed_at`) SELECT `id`,`title`,`description`,`budget`,`current_amount`,`priority`,`status`,`deadline`,`created_by`,`created_at`,`updated_at`,`completed_at` FROM `wishlist_items`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.055ms] [34;1m[rows:0][0m DROP TABLE `wishlist_items`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.976ms] [34;1m[rows:0][0m ALTER TABLE `wishlist_items__temp` RENAME TO `wishlist_items`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.030ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="wishlist_contributions"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.070ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "wishlist_contributions" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.018ms] [34;1m[rows:-][0m SELECT * FROM `wishlist_contributions` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:1][0m PRAGMA foreign_keys
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.013ms] [34;1m[rows:-][0m SELECT sql FROM sqlite_master WHERE type = "table" AND tbl_name = "wishlist_contributions" AND name = "wishlist_contributions"
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.179ms] [34;1m[rows:0][0m CREATE TABLE `wishlist_contributions__temp`  (`id` text,`item_id` text NOT NULL,`user_id` text NOT NULL,`amount` decimal(10,2) NOT NULL,`created_at` datetime,PRIMARY KEY (`id`))
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.023ms] [34;1m[rows:0][0m INSERT INTO `wishlist_contributions__temp`(`id`,`item_id`,`user_id`,`amount`,`created_at`) SELECT `id`,`item_id`,`user_id`,`amount`,`created_at` FROM `wishlist_contributions`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[0.080ms] [34;1m[rows:0][0m DROP TABLE `wishlist_contributions`
+
+2026/04/17 09:33:42 [32m
+[0m[33m[1.008ms] [34;1m[rows:0][0m ALTER TABLE `wishlist_contributions__temp` RENAME TO `wishlist_contributions`
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.032ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "wishlist_contributions" AND name = "idx_wishlist_contributions_item_id"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[2.049ms] [34;1m[rows:0][0m CREATE INDEX `idx_wishlist_contributions_item_id` ON `wishlist_contributions`(`item_id`)
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.023ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="movies"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.074ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "movies" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.049ms] [34;1m[rows:-][0m SELECT * FROM `movies` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.023ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "movies" AND name = "idx_movies_created_by"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="diaries"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.075ms] [34;1m[rows:2][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "diaries" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.022ms] [34;1m[rows:-][0m SELECT * FROM `diaries` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.020ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "diaries" AND name = "idx_diaries_date"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="reminders"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.053ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "reminders" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.020ms] [34;1m[rows:-][0m SELECT * FROM `reminders` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="meal_wishes"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.040ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "meal_wishes" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.016ms] [34;1m[rows:-][0m SELECT * FROM `meal_wishes` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.011ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="meal_histories"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.038ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "meal_histories" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.015ms] [34;1m[rows:-][0m SELECT * FROM `meal_histories` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.011ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="messages"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.040ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "messages" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:-][0m SELECT * FROM `messages` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.017ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="points_records"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.037ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "points_records" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:-][0m SELECT * FROM `points_records` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="shop_items"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.042ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "shop_items" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.012ms] [34;1m[rows:-][0m SELECT * FROM `shop_items` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="redeemed_coupons"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.035ms] [34;1m[rows:1][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "redeemed_coupons" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:-][0m SELECT * FROM `redeemed_coupons` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.010ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type='table' AND name="photos"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.039ms] [34;1m[rows:3][0m SELECT sql FROM sqlite_master WHERE type IN ("table","index") AND tbl_name = "photos" AND sql IS NOT NULL order by type = "table" desc
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.014ms] [34;1m[rows:-][0m SELECT * FROM `photos` LIMIT 1
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.013ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "photos" AND name = "idx_photos_hash"
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:31
+[0m[33m[0.011ms] [34;1m[rows:-][0m SELECT count(*) FROM sqlite_master WHERE type = "index" AND tbl_name = "photos" AND name = "idx_photos_user_id"
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /health                   --> main.main.func2 (4 handlers)
+[GIN-debug] HEAD   /health                   --> main.main.func3 (4 handlers)
+[GIN-debug] GET    /ws                       --> couple-home/backend/internal/handlers.HandleWebSocket (4 handlers)
+[GIN-debug] GET    /api/ws/online            --> couple-home/backend/internal/handlers.GetOnlineCount (4 handlers)
+[GIN-debug] GET    /uploads/*filepath        --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
+[GIN-debug] HEAD   /uploads/*filepath        --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
+[GIN-debug] GET    /api/fridge               --> couple-home/backend/internal/handlers.(*FridgeHandler).GetAllItems-fm (4 handlers)
+[GIN-debug] GET    /api/fridge/expiring      --> couple-home/backend/internal/handlers.(*FridgeHandler).GetExpiringItems-fm (4 handlers)
+[GIN-debug] GET    /api/fridge/:id           --> couple-home/backend/internal/handlers.(*FridgeHandler).GetItem-fm (4 handlers)
+[GIN-debug] POST   /api/fridge               --> couple-home/backend/internal/handlers.(*FridgeHandler).AddItem-fm (4 handlers)
+[GIN-debug] PUT    /api/fridge/:id           --> couple-home/backend/internal/handlers.(*FridgeHandler).UpdateItem-fm (4 handlers)
+[GIN-debug] DELETE /api/fridge/:id           --> couple-home/backend/internal/handlers.(*FridgeHandler).DeleteItem-fm (4 handlers)
+[GIN-debug] GET    /api/recipes              --> couple-home/backend/internal/handlers.(*RecipeHandler).GetAllRecipes-fm (4 handlers)
+[GIN-debug] GET    /api/recipes/random       --> couple-home/backend/internal/handlers.(*RecipeHandler).GetRandomRecipes-fm (4 handlers)
+[GIN-debug] GET    /api/recipes/:id          --> couple-home/backend/internal/handlers.(*RecipeHandler).GetRecipe-fm (4 handlers)
+[GIN-debug] POST   /api/recipes/recommend    --> couple-home/backend/internal/handlers.(*RecipeHandler).RecommendRecipes-fm (4 handlers)
+[GIN-debug] POST   /api/recipes/ai-recommend --> couple-home/backend/internal/handlers.(*RecipeHandler).RecommendRecipes-fm (4 handlers)
+[GIN-debug] POST   /api/recipes/shopping-list --> couple-home/backend/internal/handlers.(*RecipeHandler).GetShoppingList-fm (4 handlers)
+[GIN-debug] POST   /api/recipes/:id/vote     --> couple-home/backend/internal/handlers.(*RecipeHandler).VoteRecipe-fm (4 handlers)
+[GIN-debug] GET    /api/meals/today          --> couple-home/backend/internal/handlers.(*MealHandler).GetTodayVote-fm (4 handlers)
+[GIN-debug] POST   /api/meals/today          --> couple-home/backend/internal/handlers.(*MealHandler).CreateTodayVote-fm (4 handlers)
+[GIN-debug] POST   /api/meals/:id/vote       --> couple-home/backend/internal/handlers.(*MealHandler).SubmitVote-fm (4 handlers)
+[GIN-debug] GET    /api/meals/:id/votes      --> couple-home/backend/internal/handlers.(*MealHandler).GetVoteResult-fm (4 handlers)
+[GIN-debug] GET    /api/meals/history        --> couple-home/backend/internal/handlers.(*MealHandler).GetHistoricalVotes-fm (4 handlers)
+[GIN-debug] GET    /api/meal/wishes          --> couple-home/backend/internal/handlers.(*MealWishHandler).GetWishes-fm (4 handlers)
+[GIN-debug] POST   /api/meal/wishes          --> couple-home/backend/internal/handlers.(*MealWishHandler).AddWish-fm (4 handlers)
+[GIN-debug] PUT    /api/meal/wishes/:id      --> couple-home/backend/internal/handlers.(*MealWishHandler).UpdateWish-fm (4 handlers)
+[GIN-debug] DELETE /api/meal/wishes/:id      --> couple-home/backend/internal/handlers.(*MealWishHandler).DeleteWish-fm (4 handlers)
+[GIN-debug] POST   /api/meal/wishes/:id/done --> couple-home/backend/internal/handlers.(*MealWishHandler).MarkDone-fm (4 handlers)
+[GIN-debug] GET    /api/meal/recommend       --> couple-home/backend/internal/handlers.(*MealWishHandler).GetRecommendation-fm (4 handlers)
+[GIN-debug] GET    /api/meal/history         --> couple-home/backend/internal/handlers.(*MealWishHandler).GetHistory-fm (4 handlers)
+[GIN-debug] POST   /api/meal/history         --> couple-home/backend/internal/handlers.(*MealWishHandler).AddHistory-fm (4 handlers)
+[GIN-debug] GET    /api/chores               --> couple-home/backend/internal/handlers.(*ChoreHandler).GetChores-fm (4 handlers)
+[GIN-debug] POST   /api/chores               --> couple-home/backend/internal/handlers.(*ChoreHandler).CreateChore-fm (4 handlers)
+[GIN-debug] POST   /api/chores/:id/claim     --> couple-home/backend/internal/handlers.(*ChoreHandler).ClaimChore-fm (4 handlers)
+[GIN-debug] POST   /api/chores/:id/complete  --> couple-home/backend/internal/handlers.(*ChoreHandler).CompleteChore-fm (4 handlers)
+[GIN-debug] GET    /api/chores/stats         --> couple-home/backend/internal/handlers.(*ChoreHandler).GetStats-fm (4 handlers)
+[GIN-debug] GET    /api/chores/leaderboard   --> couple-home/backend/internal/handlers.(*ChoreHandler).GetLeaderboard-fm (4 handlers)
+[GIN-debug] GET    /api/chores/templates     --> couple-home/backend/internal/handlers.(*ChoreHandler).GetChoreTemplates-fm (4 handlers)
+[GIN-debug] POST   /api/chores/templates     --> couple-home/backend/internal/handlers.(*ChoreHandler).CreateChoreTemplate-fm (4 handlers)
+[GIN-debug] DELETE /api/chores/templates/:id --> couple-home/backend/internal/handlers.(*ChoreHandler).DeleteChoreTemplate-fm (4 handlers)
+[GIN-debug] GET    /api/bills                --> couple-home/backend/internal/handlers.(*BillHandler).GetAllBills-fm (4 handlers)
+[GIN-debug] GET    /api/bills/:id            --> couple-home/backend/internal/handlers.(*BillHandler).GetBill-fm (4 handlers)
+[GIN-debug] GET    /api/bills/stats          --> couple-home/backend/internal/handlers.(*BillHandler).GetStats-fm (4 handlers)
+[GIN-debug] GET    /api/bills/range          --> couple-home/backend/internal/handlers.(*BillHandler).GetBillsByDateRange-fm (4 handlers)
+[GIN-debug] POST   /api/bills                --> couple-home/backend/internal/handlers.(*BillHandler).CreateBill-fm (4 handlers)
+[GIN-debug] PUT    /api/bills/:id            --> couple-home/backend/internal/handlers.(*BillHandler).UpdateBill-fm (4 handlers)
+[GIN-debug] DELETE /api/bills/:id            --> couple-home/backend/internal/handlers.(*BillHandler).DeleteBill-fm (4 handlers)
+[GIN-debug] GET    /api/bills/fund           --> couple-home/backend/internal/handlers.(*FundHandler).GetAllFunds-fm (4 handlers)
+[GIN-debug] GET    /api/bills/fund/:id       --> couple-home/backend/internal/handlers.(*FundHandler).GetFund-fm (4 handlers)
+[GIN-debug] GET    /api/bills/fund/:id/contributions --> couple-home/backend/internal/handlers.(*FundHandler).GetFundContributions-fm (4 handlers)
+[GIN-debug] POST   /api/bills/fund           --> couple-home/backend/internal/handlers.(*FundHandler).CreateFund-fm (4 handlers)
+[GIN-debug] PUT    /api/bills/fund/:id       --> couple-home/backend/internal/handlers.(*FundHandler).UpdateFund-fm (4 handlers)
+[GIN-debug] POST   /api/bills/fund/contribute --> couple-home/backend/internal/handlers.(*FundHandler).ContributeToFund-fm (4 handlers)
+[GIN-debug] GET    /api/schedules            --> couple-home/backend/internal/handlers.(*ScheduleHandler).GetSchedules-fm (4 handlers)
+[GIN-debug] POST   /api/schedules            --> couple-home/backend/internal/handlers.(*ScheduleHandler).CreateSchedule-fm (4 handlers)
+[GIN-debug] GET    /api/schedules/upcoming   --> couple-home/backend/internal/handlers.(*ScheduleHandler).GetUpcoming-fm (4 handlers)
+[GIN-debug] GET    /api/schedules/:id        --> couple-home/backend/internal/handlers.(*ScheduleHandler).GetScheduleByID-fm (4 handlers)
+[GIN-debug] PUT    /api/schedules/:id        --> couple-home/backend/internal/handlers.(*ScheduleHandler).UpdateSchedule-fm (4 handlers)
+[GIN-debug] DELETE /api/schedules/:id        --> couple-home/backend/internal/handlers.(*ScheduleHandler).DeleteSchedule-fm (4 handlers)
+[GIN-debug] PATCH  /api/schedules/:id/status --> couple-home/backend/internal/handlers.(*ScheduleHandler).UpdateScheduleStatus-fm (4 handlers)
+[GIN-debug] GET    /api/calendar/events      --> couple-home/backend/internal/handlers.(*ScheduleHandler).GetSchedules-fm (4 handlers)
+[GIN-debug] POST   /api/calendar/events      --> couple-home/backend/internal/handlers.(*ScheduleHandler).CreateSchedule-fm (4 handlers)
+[GIN-debug] GET    /api/calendar/events/upcoming --> couple-home/backend/internal/handlers.(*ScheduleHandler).GetUpcoming-fm (4 handlers)
+[GIN-debug] GET    /api/calendar/events/by-date/:date --> couple-home/backend/internal/handlers.(*ScheduleHandler).GetSchedules-fm (4 handlers)
+[GIN-debug] GET    /api/calendar/events/:id  --> couple-home/backend/internal/handlers.(*ScheduleHandler).GetScheduleByID-fm (4 handlers)
+[GIN-debug] PUT    /api/calendar/events/:id  --> couple-home/backend/internal/handlers.(*ScheduleHandler).UpdateSchedule-fm (4 handlers)
+[GIN-debug] DELETE /api/calendar/events/:id  --> couple-home/backend/internal/handlers.(*ScheduleHandler).DeleteSchedule-fm (4 handlers)
+[GIN-debug] POST   /api/calendar/events/:id/confirm --> couple-home/backend/internal/handlers.(*ScheduleHandler).UpdateScheduleStatus-fm (4 handlers)
+[GIN-debug] GET    /api/anniversaries        --> couple-home/backend/internal/handlers.(*AnniversaryHandler).GetAnniversaries-fm (4 handlers)
+[GIN-debug] POST   /api/anniversaries        --> couple-home/backend/internal/handlers.(*AnniversaryHandler).CreateAnniversary-fm (4 handlers)
+[GIN-debug] GET    /api/anniversaries/upcoming --> couple-home/backend/internal/handlers.(*AnniversaryHandler).GetUpcoming-fm (4 handlers)
+[GIN-debug] GET    /api/anniversaries/days   --> couple-home/backend/internal/handlers.(*AnniversaryHandler).GetDaysTogether-fm (4 handlers)
+[GIN-debug] GET    /api/anniversaries/:id    --> couple-home/backend/internal/handlers.(*AnniversaryHandler).GetAnniversaryByID-fm (4 handlers)
+[GIN-debug] PUT    /api/anniversaries/:id    --> couple-home/backend/internal/handlers.(*AnniversaryHandler).UpdateAnniversary-fm (4 handlers)
+[GIN-debug] DELETE /api/anniversaries/:id    --> couple-home/backend/internal/handlers.(*AnniversaryHandler).DeleteAnniversary-fm (4 handlers)
+[GIN-debug] GET    /api/anniversaries/:id/progress --> couple-home/backend/internal/handlers.(*AnniversaryHandler).GetAnniversaryProgress-fm (4 handlers)
+[GIN-debug] GET    /api/wishlist             --> couple-home/backend/internal/handlers.(*WishlistHandler).GetWishlist-fm (4 handlers)
+[GIN-debug] GET    /api/wishlist/stats       --> couple-home/backend/internal/handlers.(*WishlistHandler).GetWishlistStats-fm (4 handlers)
+[GIN-debug] POST   /api/wishlist             --> couple-home/backend/internal/handlers.(*WishlistHandler).CreateWishlistItem-fm (4 handlers)
+[GIN-debug] POST   /api/wishlist/:id/contribute --> couple-home/backend/internal/handlers.(*WishlistHandler).ContributeToWishlist-fm (4 handlers)
+[GIN-debug] PUT    /api/wishlist/:id/complete --> couple-home/backend/internal/handlers.(*WishlistHandler).CompleteWishlistItem-fm (4 handlers)
+[GIN-debug] DELETE /api/wishlist/:id         --> couple-home/backend/internal/handlers.(*WishlistHandler).DeleteWishlistItem-fm (4 handlers)
+[GIN-debug] GET    /api/movies               --> couple-home/backend/internal/handlers.(*MovieHandler).GetMovies-fm (4 handlers)
+[GIN-debug] GET    /api/movies/stats         --> couple-home/backend/internal/handlers.(*MovieHandler).GetMovieStats-fm (4 handlers)
+[GIN-debug] POST   /api/movies               --> couple-home/backend/internal/handlers.(*MovieHandler).CreateMovie-fm (4 handlers)
+[GIN-debug] PUT    /api/movies/:id/watched   --> couple-home/backend/internal/handlers.(*MovieHandler).MarkWatched-fm (4 handlers)
+[GIN-debug] PUT    /api/movies/:id/rate      --> couple-home/backend/internal/handlers.(*MovieHandler).RateMovie-fm (4 handlers)
+[GIN-debug] DELETE /api/movies/:id           --> couple-home/backend/internal/handlers.(*MovieHandler).DeleteMovie-fm (4 handlers)
+[GIN-debug] GET    /api/diaries              --> couple-home/backend/internal/handlers.(*DiaryHandler).GetDiaries-fm (4 handlers)
+[GIN-debug] GET    /api/diaries/month/:month --> couple-home/backend/internal/handlers.(*DiaryHandler).GetDiariesByMonth-fm (4 handlers)
+[GIN-debug] GET    /api/diaries/:id          --> couple-home/backend/internal/handlers.(*DiaryHandler).GetDiaryByID-fm (4 handlers)
+[GIN-debug] POST   /api/diaries              --> couple-home/backend/internal/handlers.(*DiaryHandler).CreateDiary-fm (4 handlers)
+[GIN-debug] PUT    /api/diaries/:id          --> couple-home/backend/internal/handlers.(*DiaryHandler).UpdateDiary-fm (4 handlers)
+[GIN-debug] DELETE /api/diaries/:id          --> couple-home/backend/internal/handlers.(*DiaryHandler).DeleteDiary-fm (4 handlers)
+[GIN-debug] POST   /api/diaries/:id/photos   --> couple-home/backend/internal/handlers.(*DiaryHandler).UploadPhotos-fm (4 handlers)
+[GIN-debug] PUT    /api/diaries/:id/privacy  --> couple-home/backend/internal/handlers.(*DiaryHandler).UpdatePrivacy-fm (4 handlers)
+[GIN-debug] GET    /api/reminders            --> couple-home/backend/internal/handlers.(*ReminderHandler).GetReminders-fm (4 handlers)
+[GIN-debug] GET    /api/reminders/upcoming   --> couple-home/backend/internal/handlers.(*ReminderHandler).GetUpcomingReminders-fm (4 handlers)
+[GIN-debug] GET    /api/reminders/gift-ideas --> couple-home/backend/internal/handlers.(*ReminderHandler).GetGiftIdeas-fm (4 handlers)
+[GIN-debug] GET    /api/reminders/date-ideas --> couple-home/backend/internal/handlers.(*ReminderHandler).GetDateIdeas-fm (4 handlers)
+[GIN-debug] GET    /api/reminders/:id        --> couple-home/backend/internal/handlers.(*ReminderHandler).GetReminderByID-fm (4 handlers)
+[GIN-debug] POST   /api/reminders            --> couple-home/backend/internal/handlers.(*ReminderHandler).CreateReminder-fm (4 handlers)
+[GIN-debug] PUT    /api/reminders/:id        --> couple-home/backend/internal/handlers.(*ReminderHandler).UpdateReminder-fm (4 handlers)
+[GIN-debug] DELETE /api/reminders/:id        --> couple-home/backend/internal/handlers.(*ReminderHandler).DeleteReminder-fm (4 handlers)
+[GIN-debug] GET    /api/messages             --> couple-home/backend/internal/handlers.(*MessageHandler).GetMessages-fm (4 handlers)
+[GIN-debug] POST   /api/messages             --> couple-home/backend/internal/handlers.(*MessageHandler).SendMessage-fm (4 handlers)
+[GIN-debug] POST   /api/messages/:id/read    --> couple-home/backend/internal/handlers.(*MessageHandler).MarkRead-fm (4 handlers)
+[GIN-debug] POST   /api/messages/read-all    --> couple-home/backend/internal/handlers.(*MessageHandler).MarkAllRead-fm (4 handlers)
+[GIN-debug] GET    /api/points               --> couple-home/backend/internal/handlers.(*PointsHandler).GetPoints-fm (4 handlers)
+[GIN-debug] GET    /api/points/summary       --> couple-home/backend/internal/handlers.(*PointsHandler).GetSummary-fm (4 handlers)
+[GIN-debug] GET    /api/points/shop          --> couple-home/backend/internal/handlers.(*PointsHandler).GetShop-fm (4 handlers)
+[GIN-debug] POST   /api/points/redeem        --> couple-home/backend/internal/handlers.(*PointsHandler).Redeem-fm (4 handlers)
+[GIN-debug] GET    /api/points/coupons       --> couple-home/backend/internal/handlers.(*PointsHandler).GetCoupons-fm (4 handlers)
+[GIN-debug] POST   /api/points/coupons/:id/use --> couple-home/backend/internal/handlers.(*PointsHandler).UseCoupon-fm (4 handlers)
+[GIN-debug] GET    /api/statistics/overview  --> couple-home/backend/internal/handlers.(*StatisticsHandler).GetOverview-fm (4 handlers)
+[GIN-debug] GET    /api/statistics/spending  --> couple-home/backend/internal/handlers.(*StatisticsHandler).GetSpendingTrend-fm (4 handlers)
+[GIN-debug] GET    /api/statistics/categories --> couple-home/backend/internal/handlers.(*StatisticsHandler).GetCategories-fm (4 handlers)
+[GIN-debug] GET    /api/statistics/chores    --> couple-home/backend/internal/handlers.(*StatisticsHandler).GetChoresContribution-fm (4 handlers)
+[GIN-debug] GET    /api/settings/theme       --> couple-home/backend/internal/handlers.(*ThemeHandler).GetThemeConfig-fm (4 handlers)
+[GIN-debug] PUT    /api/settings/theme       --> couple-home/backend/internal/handlers.(*ThemeHandler).UpdateThemeConfig-fm (4 handlers)
+[GIN-debug] POST   /api/settings/theme/reset --> couple-home/backend/internal/handlers.(*ThemeHandler).ResetThemeConfig-fm (4 handlers)
+[GIN-debug] GET    /api/settings/themes      --> couple-home/backend/internal/handlers.(*ThemeHandler).GetAvailableThemes-fm (4 handlers)
+[GIN-debug] GET    /api/photos               --> couple-home/backend/internal/handlers.(*PhotoHandler).GetPhotos-fm (4 handlers)
+[GIN-debug] GET    /api/photos/:id           --> couple-home/backend/internal/handlers.(*PhotoHandler).GetPhoto-fm (4 handlers)
+[GIN-debug] POST   /api/photos/upload        --> couple-home/backend/internal/handlers.(*PhotoHandler).UploadPhoto-fm (4 handlers)
+[GIN-debug] DELETE /api/photos/:id           --> couple-home/backend/internal/handlers.(*PhotoHandler).DeletePhoto-fm (4 handlers)
+
+2026/04/17 09:33:42 [32m/root/.openclaw/workspace/backend/cmd/main.go:399
+[0m[33m[0.029ms] [34;1m[rows:1][0m SELECT count(*) FROM `recipes`
+2026/04/17 09:33:42 Server starting on port 8080
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8080
+[GIN-debug] [ERROR] listen tcp :8080: bind: address already in use
+2026/04/17 09:33:42 Failed to start server: listen tcp :8080: bind: address already in use

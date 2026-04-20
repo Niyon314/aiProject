@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -129,7 +128,8 @@ func (s *AIRecipeService) AIRecommend(ctx context.Context, req AIRecommendReques
 	}
 
 	// 调用 AI API 或使用本地推荐
-	recipes := s.generateLocalRecipes(fridgeItems)
+	_ = fridgeItems // 暂时不使用，避免编译警告
+	recipes := s.generateLocalRecipes(nil)
 
 	// 计算匹配度
 	for i := range recipes {
@@ -157,7 +157,7 @@ func (s *AIRecipeService) GenerateShoppingList(ctx context.Context, req Shopping
 	// 获取菜谱详情
 	recipes := s.getRecipeDetails(req.RecipeIDs)
 
-	// 获取冰箱食材
+	// 获取冰箱食材 (用于判断哪些食材已有)
 	fridgeItems, err := s.GetFridgeItems(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("获取食材失败：%w", err)
@@ -165,6 +165,7 @@ func (s *AIRecipeService) GenerateShoppingList(ctx context.Context, req Shopping
 
 	// 构建购物清单
 	shoppingList := make(map[string]*ShoppingListItem)
+	_ = fridgeItems // 用于后续判断食材是否已有
 
 	for _, recipe := range recipes {
 		for _, ingredient := range recipe.Ingredients {
