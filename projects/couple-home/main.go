@@ -101,7 +101,9 @@ func initDatabase(dbPath string) (*gorm.DB, error) {
 	err = db.AutoMigrate(
 		&models.User{},
 		&models.RefreshToken{},
-		// 添加其他模型...
+		&models.Photo{},
+		&models.PhotoLike{},
+		&models.PhotoComment{},
 	)
 	if err != nil {
 		return nil, err
