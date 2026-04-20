@@ -1,137 +1,132 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import { useAuthStore } from '../store/authStore';
 
-interface WSMessage {
-  type: string;
-  from: string;
+// WebSocket 消息类型
+export interface WSMessage {
+  type: 'message' | 'notification' | 'system';
+  from?: string;
   to?: string;
   content: any;
 }
 
-interface UseWebSocketOptions {
-  url?: string;
-  userId?: string;
+// WebSocket 回调类型
+interface WSCallbacks {
   onMessage?: (message: WSMessage) => void;
-  onConnect?: () => void;
-  onDisconnect?: () => void;
-  reconnectInterval?: number;
-  autoReconnect?: boolean;
+  onNotification?: (notification: WSMessage) => void;
+  onSystem?: (system: WSMessage) => void;
 }
 
-export function useWebSocket(options: UseWebSocketOptions = {}) {
-  const {
-    url = 'ws://localhost:8080/ws',
-    userId = 'anonymous',
-    onMessage,
-    onConnect,
-    onDisconnect,
-    reconnectInterval = 3000,
-    autoReconnect = true,
-  } = options;
+// WebSocket URL
+const WS_URL = import.meta.env.VITE_WS_URL || `ws://${window.location.host}/ws`;
 
+/**
+ * WebSocket Hook
+ * @param callbacks 消息回调函数
+ * @param autoConnect 是否自动连接
+ */
+export function useWebSocket(callbacks?: WSCallbacks, autoConnect: boolean = true) {
   const wsRef = useRef<WebSocket | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [connected, setConnected] = useState(false);
-  const [messages, setMessages] = useState<WSMessage[]>([]);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const { isAuthenticated } = useAuthStore();
 
   // 连接 WebSocket
   const connect = useCallback(() => {
+    if (!isAuthenticated) {
+      console.log('[WS] 未登录，跳过连接');
+      return;
+    }
+
     if (wsRef.current?.readyState === WebSocket.OPEN) {
+      console.log('[WS] 已连接');
       return;
     }
 
     try {
-      const wsUrl = `${url}?user=${encodeURIComponent(userId)}`;
-      const ws = new WebSocket(wsUrl);
+      console.log('[WS] 开始连接:', WS_URL);
+      wsRef.current = new WebSocket(WS_URL);
 
-      ws.onopen = () => {
-        console.log('[WS] 已连接');
-        setConnected(true);
-        if (reconnectTimeoutRef.current) {
-          clearTimeout(reconnectTimeoutRef.current);
-          reconnectTimeoutRef.current = null;
-        }
-        onConnect?.();
+      wsRef.current.onopen = () => {
+        console.log('[WS] 连接成功');
       };
 
-      ws.onmessage = (event) => {
+      wsRef.current.onmessage = (event) => {
         try {
           const message: WSMessage = JSON.parse(event.data);
           console.log('[WS] 收到消息:', message);
-          setMessages((prev) => [...prev, message]);
-          onMessage?.(message);
-        } catch (err) {
-          console.error('[WS] 解析消息失败:', err);
+
+          // 根据消息类型调用回调
+          switch (message.type) {
+            case 'message':
+              callbacks?.onMessage?.(message);
+              break;
+            case 'notification':
+              callbacks?.onNotification?.(message);
+              break;
+            case 'system':
+              callbacks?.onSystem?.(message);
+              break;
+            default:
+              console.log('[WS] 未知消息类型:', message.type);
+          }
+        } catch (error) {
+          console.error('[WS] 解析消息失败:', error);
         }
       };
 
-      ws.onclose = () => {
-        console.log('[WS] 连接关闭');
-        setConnected(false);
-        onDisconnect?.();
-
-        // 自动重连
-        if (autoReconnect && !reconnectTimeoutRef.current) {
-          console.log(`[WS] 将在 ${reconnectInterval}ms 后重连...`);
-          reconnectTimeoutRef.current = setTimeout(() => {
-            reconnectTimeoutRef.current = null;
-            connect();
-          }, reconnectInterval);
-        }
-      };
-
-      ws.onerror = (error) => {
+      wsRef.current.onerror = (error) => {
         console.error('[WS] 错误:', error);
       };
 
-      wsRef.current = ws;
-    } catch (err) {
-      console.error('[WS] 连接失败:', err);
+      wsRef.current.onclose = () => {
+        console.log('[WS] 连接关闭，5 秒后重连...');
+        reconnectTimeoutRef.current = setTimeout(() => {
+          if (isAuthenticated) {
+            connect();
+          }
+        }, 5000);
+      };
+    } catch (error) {
+      console.error('[WS] 连接失败:', error);
+      reconnectTimeoutRef.current = setTimeout(connect, 5000);
     }
-  }, [url, userId, onMessage, onConnect, onDisconnect, reconnectInterval, autoReconnect]);
-
-  // 发送消息
-  const sendMessage = useCallback((message: WSMessage) => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(message));
-      return true;
-    }
-    console.warn('[WS] 连接未打开，无法发送消息');
-    return false;
-  }, []);
+  }, [isAuthenticated, callbacks]);
 
   // 断开连接
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
     }
     if (wsRef.current) {
       wsRef.current.close();
       wsRef.current = null;
+      console.log('[WS] 已断开连接');
     }
-    setConnected(false);
   }, []);
 
-  // 组件卸载时断开连接
+  // 发送消息
+  const sendMessage = useCallback((message: WSMessage) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify(message));
+      console.log('[WS] 发送消息:', message);
+    } else {
+      console.warn('[WS] 连接未打开，无法发送消息');
+    }
+  }, []);
+
+  // 自动连接
   useEffect(() => {
+    if (autoConnect && isAuthenticated) {
+      connect();
+    }
     return () => {
       disconnect();
     };
-  }, [disconnect]);
-
-  // 初始连接
-  useEffect(() => {
-    connect();
-  }, [connect]);
+  }, [autoConnect, isAuthenticated, connect, disconnect]);
 
   return {
-    connected,
-    messages,
+    connected: wsRef.current?.readyState === WebSocket.OPEN,
     sendMessage,
     connect,
     disconnect,
-    clearMessages: () => setMessages([]),
   };
 }
-
-export default useWebSocket;

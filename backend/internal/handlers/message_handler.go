@@ -78,6 +78,9 @@ func (h *MessageHandler) SendMessage(c *gin.Context) {
 		return
 	}
 	
+	// 发送 WebSocket 通知
+	SendNewMessageNotification(msg.ID, msg.SenderName, msg.Content)
+	
 	c.JSON(http.StatusCreated, gin.H{"data": msg, "message": "留言已送达 💕"})
 }
 

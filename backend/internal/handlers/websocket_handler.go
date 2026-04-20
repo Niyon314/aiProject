@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -99,8 +101,59 @@ func (h *WSHub) run() {
 
 // Broadcast 广播消息给所有客户端
 func (h *WSHub) Broadcast(msg WSMessage) {
-	// 在 handlers 层调用，需要 marshal
-	// 简化处理：由调用者负责序列化
+	data, err := json.Marshal(msg)
+	if err != nil {
+		log.Printf("[WS] 序列化消息失败：%v", err)
+		return
+	}
+	h.broadcast <- data
+}
+
+// BroadcastToUser 向特定用户发送消息
+func (h *WSHub) BroadcastToUser(userID string, msg WSMessage) {
+	data, err := json.Marshal(msg)
+	if err != nil {
+		log.Printf("[WS] 序列化消息失败：%v", err)
+		return
+	}
+
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+
+	for client := range h.clients {
+		if client.id == userID {
+			select {
+			case client.send <- data:
+			default:
+				close(client.send)
+				delete(h.clients, client)
+			}
+			break
+		}
+	}
+}
+
+// BroadcastExcept 广播消息给除指定用户外的所有客户端
+func (h *WSHub) BroadcastExcept(excludeUserID string, msg WSMessage) {
+	data, err := json.Marshal(msg)
+	if err != nil {
+		log.Printf("[WS] 序列化消息失败：%v", err)
+		return
+	}
+
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+
+	for client := range h.clients {
+		if client.id != excludeUserID {
+			select {
+			case client.send <- data:
+			default:
+				close(client.send)
+				delete(h.clients, client)
+			}
+		}
+	}
 }
 
 // WSClient 读取消息
@@ -190,4 +243,59 @@ func GetOnlineCount(c *gin.Context) {
 	count := len(globalHub.clients)
 	globalHub.mu.RUnlock()
 	c.JSON(http.StatusOK, gin.H{"count": count})
+}
+
+// SendNewMessageNotification 发送新留言通知
+func SendNewMessageNotification(messageID, senderName, content string) {
+	if globalHub == nil {
+		return
+	}
+	globalHub.Broadcast(WSMessage{
+		Type: "new_message",
+		From: "system",
+		Content: map[string]interface{}{
+			"messageId":  messageID,
+			"senderName": senderName,
+			"content":    content,
+			"timestamp":  time.Now().Unix(),
+		},
+	})
+}
+
+// SendVoteUpdateNotification 发送投票更新通知
+func SendVoteUpdateNotification(voteID, mealType, date string, matchSuccess bool, resultName string) {
+	if globalHub == nil {
+		return
+	}
+	globalHub.Broadcast(WSMessage{
+		Type: "vote_update",
+		From: "system",
+		Content: map[string]interface{}{
+			"voteId":      voteID,
+			"mealType":    mealType,
+			"date":        date,
+			"matchSuccess": matchSuccess,
+			"resultName":  resultName,
+			"timestamp":   time.Now().Unix(),
+		},
+	})
+}
+
+// SendScheduleReminderNotification 发送日程提醒通知
+func SendScheduleReminderNotification(scheduleID, title, icon, startTime string, reminderType string) {
+	if globalHub == nil {
+		return
+	}
+	globalHub.Broadcast(WSMessage{
+		Type: "schedule_reminder",
+		From: "system",
+		Content: map[string]interface{}{
+			"scheduleId":   scheduleID,
+			"title":        title,
+			"icon":         icon,
+			"startTime":    startTime,
+			"reminderType": reminderType,
+			"timestamp":    time.Now().Unix(),
+		},
+	})
 }

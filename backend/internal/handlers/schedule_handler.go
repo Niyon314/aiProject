@@ -292,13 +292,31 @@ func (h *ScheduleHandler) UpdateScheduleStatus(c *gin.Context) {
 		return
 	}
 
-	if err := h.service.UpdateScheduleStatus(c.Request.Context(), id, models.ScheduleStatus(req.Status)); err != nil {
+	// 获取日程信息用于通知
+	schedule, err := h.service.GetScheduleByID(c.Request.Context(), id)
+	if err != nil {
 		if err == service.ErrScheduleNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": "schedule not found"})
 			return
 		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	}
+
+	if err := h.service.UpdateScheduleStatus(c.Request.Context(), id, models.ScheduleStatus(req.Status)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 如果状态更新为已完成，发送 WebSocket 通知
+	if models.ScheduleStatus(req.Status) == models.ScheduleStatusCompleted {
+		SendScheduleReminderNotification(
+			schedule.ID,
+			schedule.Title,
+			schedule.Icon,
+			schedule.StartTime.Format(time.RFC3339),
+			string(schedule.Reminder),
+		)
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "schedule status updated successfully"})

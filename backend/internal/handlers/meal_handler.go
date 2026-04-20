@@ -110,6 +110,19 @@ func (h *MealHandler) SubmitVote(c *gin.Context) {
 		return
 	}
 
+	// 如果双方都已投票，发送 WebSocket 通知
+	if vote.Status == "completed" || vote.Status == "voted" {
+		// 检查是否双方都投票了（通过检查 partnerVote 是否存在）
+		if vote.PartnerVote != nil && vote.UserVote != nil {
+			matchSuccess := vote.Result != nil
+			resultName := ""
+			if vote.Result != nil {
+				resultName = vote.Result.Name
+			}
+			SendVoteUpdateNotification(vote.ID, vote.MealType, vote.Date, matchSuccess, resultName)
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": vote, "message": "vote submitted successfully"})
 }
 

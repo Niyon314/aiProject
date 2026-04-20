@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import { WSNotification } from './components/WSNotification';
 
 // Lazy load all pages for code splitting
 const Login = () => <Suspense fallback={<PageLoader />}><LoginLazy /></Suspense>;
@@ -86,9 +87,42 @@ function PageLoader() {
 }
 
 function App() {
+  // 获取用户 ID（从 localStorage 或默认值）
+  const getUserId = () => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('userId');
+      return stored || 'user';
+    }
+    return 'user';
+  };
+
+  // 处理通知点击
+  const handleNotificationClick = (notification: any) => {
+    console.log('[App] 通知点击:', notification);
+    // 根据通知类型跳转到相应页面
+    switch (notification.type) {
+      case 'new_message':
+        window.location.href = '/messages';
+        break;
+      case 'vote_update':
+        window.location.href = '/meal';
+        break;
+      case 'schedule_reminder':
+        window.location.href = '/schedule';
+        break;
+    }
+  };
+
   return (
     <BrowserRouter>
       <ThemeProvider>
+        {/* WebSocket 通知组件 */}
+        <WSNotification
+          userId={getUserId()}
+          wsUrl={import.meta.env.VITE_WS_URL || 'ws://localhost:8080/ws'}
+          onNotificationClick={handleNotificationClick}
+        />
+        
         <Routes>
           {/* 公开路由 */}
           <Route path="/login" element={<Login />} />
